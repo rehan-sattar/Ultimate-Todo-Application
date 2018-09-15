@@ -3,6 +3,7 @@ import { Actions } from './Actions';
 const defaultState = {
     allTodos: [],
     error: '',
+    addedTodo : false
 }
 const ultimateTodoReducer = (state = defaultState, action) => {
     let updatedState = { ...state };
@@ -10,7 +11,7 @@ const ultimateTodoReducer = (state = defaultState, action) => {
         // add task
         case Actions.addTodoSuccess:
             swal('Todo Added');
-            console.log(action.payload);
+            updatedState.addedTodo = true;
             break;
         case Actions.addTodoError:
             swal(`Error: ${action.err} !`);
