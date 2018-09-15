@@ -7,7 +7,7 @@ const should = chai.should();
 
 chai.use(chaiHttp);
 
-// UN COMMENT THE TESTS YOU WANT TO CHECK
+// UNCOMMENT THE TESTS YOU WANT TO CHECK
 //THAN RUN NPM TEST IN TERMINAL
 
 // describe("Api Get test 1", () => {
