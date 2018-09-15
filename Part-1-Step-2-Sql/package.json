@@ -7,7 +7,8 @@
     "build": "tsc",
     "dev": "ts-node ./lib/server.ts",
     "start": "nodemon ./dist/server.js",
-    "prod": "npm run build && npm run start"
+    "prod": "npm run build && npm run start",
+    "test": "mocha ./lib/Tests/test.js"
   },
   "author": "Adnan Hussain",
   "license": "ISC",
@@ -18,5 +19,10 @@
     "nodemon": "^1.18.4",
     "pg": "^7.4.3",
     "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "chai-http": "^4.2.0",
+    "mocha": "^5.2.0"
   }
 }
