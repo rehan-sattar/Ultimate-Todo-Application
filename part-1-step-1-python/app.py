@@ -9,7 +9,7 @@ app.config['MONGO_URI'] = 'mongodb://localhost:27017/todo'
  #Configure the connection to the database
 
 
-mongo = PyMongo(app) 
+mongo = PyMongo(app)
 todo=mongo.db.task    # for selecting collection in todo databases
 #home page
 @app.route('/')
@@ -120,13 +120,6 @@ def removed(id):
         return 'record deleted'
     else:
         return 'No record found'
-
-
-
-
-
-
-
 
 
 
