@@ -1,22 +1,22 @@
 import * as mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
-export const todo =new Schema({
-    Title:{
-        type:String,
-        required:"Enter title"
+const todo = new Schema({
+    Title: {
+        type: String,
+        required: "Enter title"
     },
-    Description:{
-        type:String,
-        required:"Enter Description"
+    Description: {
+        type: String,
+        required: "Enter Description"
     },
-    Done:{
-        type:Boolean,
-        default:false
+    Done: {
+        type: Boolean,
+        default: false
     },
-    CreatedAt:{
-        type:Date,
-        default:new Date()
+    CreatedAt: {
+        type: Date,
+        default: new Date()
     }
 })
 
