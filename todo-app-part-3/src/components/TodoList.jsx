@@ -5,7 +5,8 @@ import Modal from "react-responsive-modal";
 import {
     getAllTodosFromFireStore,
     deleterTodoFromFireStore,
-    updateTodoInFireStore
+    updateTodoInFireStore,
+    taskDoneAttempt
 } from "../store/ActionCreators";
 
 class TodoList extends Component {
@@ -19,7 +20,7 @@ class TodoList extends Component {
             updateDoneStatus: false,
 
         };
-        // this.handleTaskdone = this.handleTaskdone.bind(this);
+        this.handleTaskdone = this.handleTaskdone.bind(this);
         this.handleDeleteRequest = this.handleDeleteRequest.bind(this);
         this.handleUpdateRequest = this.handleUpdateRequest.bind(this);
     };
@@ -48,7 +49,6 @@ class TodoList extends Component {
     }
 
 
-
     handleUpdateRequest(e) {
         e.preventDefault();
         const { updateDescription, updateTitle, updateDoneStatus } = this.state;
@@ -59,20 +59,38 @@ class TodoList extends Component {
             todoId: localStorage.getItem('updatedTodoId')
         });
     }
+
+    handleTaskdone(todo) {
+        this.props.changeDoneStatus(todo);
+    }
     render() {
         const { open } = this.state;
         return (
             <div>
-                {this.state.todos ? this.state.todos.map((todo, index) => (
-                    <div key={index} style={{ margin: '0.5em 0em' }}>
-                        <h5>id: {index + 1}</h5>
-                        <h5>Title: {todo.title}</h5>
-                        <h5>Description: {todo.description}</h5>
-                        {/* <h5>Status: {false ? <p> Task completed! </p> : (<button onClick={this.handleTaskdone}>Done</button>)} </h5> */}
-                        <button onClick={() => this.onOpenModal(todo.id)}>Update</button>
-                        <button onClick={() => this.handleDeleteRequest(todo.id)}>Delete</button>
+                <div className="container">
+                    <div className="row justify-content-center">
+                        <div className="col-md-8 col-lg-8 col-sm-12">
+                            {this.state.todos ? this.state.todos.map((todo, index) => (
+                                <div key={index} className="card my-3">
+                                    <div className="card-body">
+                                        <h5>id: {index + 1}</h5>
+                                        <h5>Title: {todo.title}</h5>
+                                        <h5>Description: {todo.description}</h5>
+                                        <h5>Status: {todo.doneStatus === true ? <span> Task completed! </span> : (<button onClick={() => this.handleTaskdone(todo)}>Done</button>)} </h5>
+                                    </div>
+                                    <div className="card-footer">
+                                        <button 
+                                        className={"btn btn-success btn-lg mx-2"}
+                                        onClick={() => this.onOpenModal(todo.id)}>Update</button>
+                                        <button 
+                                        className={"btn btn-danger btn-lg mx-2"}
+                                        onClick={() => this.handleDeleteRequest(todo.id)}>Delete</button>
+                                    </div>
+                                </div>
+                            )) : <p>No items</p>}
+                        </div>
                     </div>
-                )) : <p>No items</p>}
+                </div>
 
                 <Modal open={open} onClose={this.onCloseModal} center>
                     <h2>Update Todo</h2>
@@ -105,7 +123,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => bindActionCreators({
     downloadTodos: (Todostate) => getAllTodosFromFireStore(Todostate),
     deleteATask: (todoId) => deleterTodoFromFireStore(todoId),
-    updateTodoTask: (newTodoObject) => updateTodoInFireStore(newTodoObject)
+    updateTodoTask: (newTodoObject) => updateTodoInFireStore(newTodoObject),
+    changeDoneStatus: (todo) => taskDoneAttempt(todo)
 },
     dispatch);
 export default connect(mapStateToProps, mapDispatchToProps)(TodoList);

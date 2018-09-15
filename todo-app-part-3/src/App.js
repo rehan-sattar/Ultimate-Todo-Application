@@ -4,11 +4,15 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <h1>The ultimate Todo list project partIII</h1>
+        <header className="py-3 bg-white text-center">
+          <h1>The Ultimate TodoList (part-3)</h1>
+        </header>
         <AppContainer />
       </div>
     );
   }
 }
+
+
 
 export default App;

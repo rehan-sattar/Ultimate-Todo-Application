@@ -14,4 +14,6 @@ export const Actions = {
     getSpecificTodoSuccess : 'GET_SPECIFIC_TODO_SUCCESS',
     getSpecificTodoError : 'GET_SPECIFIC_TODO_ERROR',
     
+    taskDoneSuccess : 'TASK_DONE_SUCCESS',
+    taskDoneError : 'TASK_DONE_ERROR'
 };
