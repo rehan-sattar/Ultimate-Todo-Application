@@ -1,14 +1,10 @@
-from flask import Flask,request,jsonify
-
+from flask import Flask ,request,jsonify
 from flask_pymongo import PyMongo
 
-app = Flask(__name__)
 
+app =Flask(__name__)
 app.config['MONGO_DBNAME']='todo'
 app.config['MONGO_URI'] = 'mongodb://todo:osama123@ds157742.mlab.com:57742/todo'
-
- #Configure the connection to the database
-
 
 mongo = PyMongo(app)
 todo=mongo.db.task    # for selecting collection in todo databases
@@ -27,12 +23,13 @@ def get_allTask():
 
     for t in todo.find():
         data.append({'id':t['id'],'name': t['name'] ,'done': t['done'] ,'priority': t['priority'] ,'desc': t['desc']})
-    return jsonify({'task': data})
-
+        if data:
+            return jsonify({'task': data})
+    return jsonify({"result":"No task found" })
 # search an specific with ID
-@app.route('/api/v.1.0/<id>' , methods=['GET'])
+@app.route('/api/v.1.0/<int:id>' , methods=['GET'])
 def search(id):
-    query=mongo.db.task.find_one({'id':id})
+    query=todo.find_one({'id':id})
     if query:
         output=[{'id':query['id'],'name':query['name'],'done':query['done'],'priority':query['priority'],'description':query['desc']}]
         return jsonify({'results':output})
@@ -58,11 +55,12 @@ def add_data():
     return jsonify({'results': output})
 
 
-@app.route('/api/v.1.0/<id>', methods=['PUT'])
+
+@app.route('/api/v.1.0/<int:id>', methods=['PUT'])
 def update_data(id):
-    find=mongo.db.task.find_one({'id':id})
+    find=todo.find_one({"id":id})
     if find:
-        find['id']=request.json['id']
+        #find['id']=request.json['id']
         find['name']=request.json['name']
         find['desc']= request.json['desc']
         find['done']= request.json['done']
@@ -72,12 +70,10 @@ def update_data(id):
     else:
         return jsonify({"result":'failed'})
 
-#
 
 
 
 
-#
 # all completed task
 @app.route('/api/v.1.0/completed')
 def complete():
@@ -109,21 +105,13 @@ def uncomplete():
 # Deleting a specific data with id
 @app.route('/api/v.1.0/<int:id>', methods=['DELETE'])
 def removed(id):
-    s=mongo.db.task.find_one({'id':id})
+    s=todo.find_one({"id":id})
 
     if s:
-        mongo.db.task.remove({'id':id})
+        todo.remove({"id":id})
         return 'record deleted'
     else:
         return 'No record found'
-
-
-
-
-
-
-
-
 
 
 
