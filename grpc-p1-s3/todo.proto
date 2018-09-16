@@ -1,12 +1,13 @@
 syntax = "proto3"; //Using proto3 version.
 
-package todos; 
+package todoproto; 
 
 service TodoService {
   rpc List (Empty) returns (TodoList);
   rpc Insert (Todo) returns (Empty);
-  rpc Get (TodoId) returns (TodoList);
-  rpc Remove (TodoId) returns (Empty);
+  rpc Get (TodoId) returns (Todo);
+  rpc Update (Todo) returns (Todo);
+  rpc Delete (TodoId) returns (Empty);
 }
 
 // Message Type definition for a Todo.
@@ -20,7 +21,7 @@ message Todo {
 }
 
 message TodoList {
-  repeated Todo todo = 1;
+  repeated Todo todos = 1;
 }
 
 message TodoId {

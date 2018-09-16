@@ -19,6 +19,7 @@
   "author": "zaynkorai",
   "license": "MIT",
   "dependencies": {
+    "@grpc/proto-loader": "^0.3.0",
     "bluebird": "^3.5.2",
     "grpc": "^1.15.1",
     "mongoose": "^5.2.14"
