@@ -1,6 +1,6 @@
-syntax = "proto3"; //Specify proto3 version.
+syntax = "proto3"; //Using proto3 version.
 
-package todos; //Optional: unique package name.
+package todos; 
 
 service TodoService {
   rpc List (Empty) returns (TodoList);
@@ -10,8 +10,11 @@ service TodoService {
 }
 
 // Message Type definition for a Todo.
+
+message Empty {}
+
 message Todo {
-  int32 _id = 1;
+  int32 id = 1;
   string title = 2;
   string description = 3;
 }
@@ -21,7 +24,5 @@ message TodoList {
 }
 
 message TodoId {
-  int32 _id = 1;
+  int32 id = 1;
 }
-
-message Empty {}
