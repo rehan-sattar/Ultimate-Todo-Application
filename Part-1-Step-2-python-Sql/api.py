@@ -16,7 +16,7 @@ db.create_all()
 
 @app.route('/')
 def index():
-    return 'ToDo Api'
+    return '<h1>ToDo Api</h1>'
 
 @app.route('/todo/api/v1.0/tasks', methods=['GET'])
 def show_tasks():
@@ -34,7 +34,7 @@ def show_tasks():
 @app.route('/todo/api/v1.0/tasks/add', methods=['POST'])
 def add():
     add = request.get_json()
-    newTask=todoApi(title=new['title'],
+    newTask=todoApi(title=add['title'],
                     done=True)
     db.session.add(newTask)
     db.session.commit()
