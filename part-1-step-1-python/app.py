@@ -1,10 +1,11 @@
 from flask import Flask,request,jsonify
+
 from flask_pymongo import PyMongo
-# from pymongo import MongoClient # Database connector
 
 app = Flask(__name__)
-app.config['MONGO_DBNAME'] = 'todo'
-app.config['MONGO_URI'] = 'mongodb://localhost:27017/todo'
+
+app.config['MONGO_DBNAME']='todo'
+app.config['MONGO_URI'] = 'mongodb://todo:osama123@ds157742.mlab.com:57742/todo'
 
  #Configure the connection to the database
 
@@ -25,15 +26,15 @@ def get_allTask():
     data = []
 
     for t in todo.find():
-        data.append({'id':t['id'],'name': t['name'] ,'done': t['done'] ,'priority': t['priority'] ,'description': t['description']})
+        data.append({'id':t['id'],'name': t['name'] ,'done': t['done'] ,'priority': t['priority'] ,'desc': t['desc']})
     return jsonify({'task': data})
 
 # search an specific with ID
-@app.route('/api/v.1.0/<int:id>' , methods=['GET'])
+@app.route('/api/v.1.0/<id>' , methods=['GET'])
 def search(id):
     query=mongo.db.task.find_one({'id':id})
     if query:
-        output=[{'id':query['id'],'name':query['name'],'done':query['done'],'priority':query['priority'],'description':query['description']}]
+        output=[{'id':query['id'],'name':query['name'],'done':query['done'],'priority':query['priority'],'description':query['desc']}]
         return jsonify({'results':output})
     else:
         return jsonify({'results':'no result found with {}'.format(id)})
@@ -49,8 +50,8 @@ def add_data():
 
     done = request.json['done']
     priority = request.json['priority']
-    desc = request.json['description']
-    add_id=todo.insert({'id':id,'name':name,'done':done,'priority':priority,'description': desc})
+    desc = request.json['desc']
+    add_id=todo.insert({'id':id,'name':name,'done':done,'priority':priority,'desc': desc})
     new_data=todo.find_one({'_id':add_id})
 
     output = {'name': new_data['name'], 'done': new_data['done'], 'priority': new_data['priority'], 'desc': new_data['desc']}
@@ -59,27 +60,22 @@ def add_data():
 
 @app.route('/api/v.1.0/<id>', methods=['PUT'])
 def update_data(id):
-    # dict_update={'id':request.json['id'],'name':request.json['name'], 'done':request.json['done'],'priority':request.json['priority'],'description':request.json['description']}
-    # mongo.db.task.update({'id':id},{'$set':dict_update})
-    # return 'done'
-    find =mongo.db.task.find_one({'id':id})
-
-    if find is not None:
-        find["name"]=request.json["name"]
-        find["description"]= request.json["description"]
-        find["done"]= request.json["done"]
-        find["priority"]= request.json["priority"]
+    find=mongo.db.task.find_one({'id':id})
+    if find:
+        find['id']=request.json['id']
+        find['name']=request.json['name']
+        find['desc']= request.json['desc']
+        find['done']= request.json['done']
+        find['priority']= request.json['priority']
         mongo.db.task.save(find)
-        return 'done'
+        return jsonify({"result": "success"})
     else:
-        return 'cant done'
+        return jsonify({"result":'failed'})
 
-    # id=request.json['id']
-    # name = request.json['name']
-    # desc = request.json['description']
-    # done = request.json['done']
-    # pr = request.json['priority']
-    # mongo.db.task.update({'id':id}, {'$set': {'name':name,'done': done, 'priority': pr,'description':desc}})
+#
+
+
+
 
 #
 # all completed task
@@ -103,7 +99,7 @@ def uncomplete():
     task=todo.find({"done":"no"})
 
     for t in task :
-        data.append({'id':t['id'],'name': t['name'], 'done': t['done'], 'priority': t['priority'], 'description': t['description']})
+        data.append({'id':t['id'],'name': t['name'], 'done': t['done'], 'priority': t['priority'], 'description': t['desc']})
     if data:
         return jsonify({'incomplete Task': data})
 
@@ -120,6 +116,13 @@ def removed(id):
         return 'record deleted'
     else:
         return 'No record found'
+
+
+
+
+
+
+
 
 
 
