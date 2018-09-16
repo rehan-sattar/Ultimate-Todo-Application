@@ -4,7 +4,9 @@ const grpc = require('grpc');
 var protoLoader = require('@grpc/proto-loader');
 
 var packageDefinition = protoLoader.loadSync(
-    PROTO_PATH, { keepCase: true, enums: String, defaults: true });
+    PROTO_PATH, {
+        keepCase: true, enums: String, defaults: true, arrays: true, objects: true, oneofs: true
+    });
 var todoproto = grpc.loadPackageDefinition(packageDefinition).todoproto;
 // The protoDescriptor object has the full package hierarchy
 

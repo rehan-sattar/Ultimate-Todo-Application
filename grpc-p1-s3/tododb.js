@@ -4,28 +4,24 @@ var Todo = class {
 
 	constructor(payload) {
 		this.payload = payload;
-	}	
-
-	static list(callback) {
-		const projections = {
-			_id: 0
-		};
-		todoModel.find({}, projections, callback);
 	}
 
-	add(callback) {
+	static list(callback) {
+		todoModel.find({}, { _id: 0, __v: 0 }, { lean: true }, callback);
+	}
+
+	insert(callback) {
 		new todoModel(this.payload).save(callback);
 	}
 
-	fetch(callback) {
-		const criteria = this.payload.criteria;
-		const projections = this.payload.projections;
-		todoModel.find(criteria, projections, callback)
+	get(callback) {
+		const condition = this.payload.condition;
+		todoModel.find(condition, { _id: 0, __v: 0 }, { lean: true }, callback)
 	}
 
-	remove(callback) {
-		const criteria = this.payload;
-		todoModel.remove(criteria, callback);
+	delete(callback) {
+		const condition = this.payload;
+		todoModel.deleteOne(condition, callback);
 	}
 };
 module.exports = Todo;

@@ -1,56 +1,96 @@
 
+const PROTO_PATH = __dirname + '/todo.proto';
 const grpc = require('grpc');
-const protoTodos = grpc.load('todo.proto');
+var protoLoader = require('@grpc/proto-loader');
+
+var packageDefinition = protoLoader.loadSync(
+    PROTO_PATH, {
+        keepCase: true, enums: String, defaults: true, oneofs: true
+    });
+
+var todoproto = grpc.loadPackageDefinition(packageDefinition).todoproto;
+
 const server = new grpc.Server();
 
-// global.Mongoose = require('mongoose');
-// var mongoDB = 'mongodb://localhost/grpctodo';
-// Mongoose.Promise = global.Promise;
-// Mongoose.connect(mongoDB, { useNewUrlParser: true })
-//     .then(() => console.log('Mongodb connection succesful'))
-//     .catch((err) => console.error(err));
-// const TodoDb = require('./tododb');
+global.Mongoose = require('mongoose');
+var mongoDB = 'mongodb://localhost/grpctodo';
+Mongoose.Promise = global.Promise;
+Mongoose.connect(mongoDB, { useNewUrlParser: true })
+    .then(() => console.log('Mongodb connection succesful'))
+    .catch((err) => console.error(err));
+Mongoose.set('useCreateIndex', true);
+const TodoDb = require('./tododb');
 
-var todos = [{
-    id: 12,
-    title: 'Ultimate Todo App',
-    description: 'Ultimate Todo App Projects assigned by Sir Zia Khan and Team'
-}];
+// static code works without database
+// var todos = [{
+//     id: 0,
+//     title: 'Ultimate Todo App',
+//     description: 'Ultimate Todo App Projects assigned by Sir Zia Khan and Team'
+// }];
 
-server.addService(protoTodos.todoproto.TodoService.service, {
+server.addService(todoproto.TodoService.service, {
 
-    list: function(_, callback) {
-        callback(null, todos);
+    list: function (_, callback) {
+        TodoDb.list(callback);
+        // static code works without database
+        // callback(null, todos);
     },
 
-    get: function(call, callback) {
-        for (var i = 0; i < todos.length; i++)
-            if (todos[i].id == call.request.id)
-                return callback(null, todos[i]);
-        callback({
-            code: grpc.status.NOT_FOUND,
-            details: 'Not found'
+    get: function (call, callback) {
+        var payload = {
+            condition: {
+                id: call.request.id
+            },
+        };
+        var t = new TodoDb(payload);
+        t.get(callback);
+
+        // static code works without database
+        // for (var i = 0; i < todos.length; i++)
+        //     if (todos[i].id == call.request.id)
+        //         return callback(null, todos[i]);
+        // callback({
+        //     code: grpc.status.NOT_FOUND,
+        //     details: 'Not found'
+        // });
+    },
+
+
+    insert: function (call, callback) {
+
+        var t = new TodoDb({
+            id: call.request.id,
+            title: call.request.title,
+            description: call.request.description,
         });
+        t.insert(callback);
+
+        // static code works without database
+        // var todo = call.request;
+        // todos.push(todo);
+        // callback(null, {});
     },
 
-
-    insert: function(call, callback) {
-        var todo = call.request;
-        todos.push(todo);
-        callback(null, {});
-    },
-
-    delete: function(call, callback) {
-        for (var i = 0; i < todos.length; i++) {
-            if (todos[i].id == call.request.id) {
-                todos.splice(i, 1);
-                return callback(null, {});
+    delete: function (call, callback) {
+        var payload = {
+            condition: {
+                id: call.request.id
             }
-        }
-        callback({
-            code: grpc.status.NOT_FOUND,
-            details: 'Not found'
-        });
+        };
+        var t = new TodoDb(payload);
+        t.delete(callback);
+
+        // static code works without database
+        // for (var i = 0; i < todos.length; i++) {
+        //     if (todos[i].id == call.request.id) {
+        //         todos.splice(i, 1);
+        //         return callback(null, {});
+        //     }
+        // }
+        // callback({
+        //     code: grpc.status.NOT_FOUND,
+        //     details: 'Not found'
+        // });
     },
 });
 
