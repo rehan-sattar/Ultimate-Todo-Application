@@ -1,11 +1,11 @@
-from flask import Flask, request
+from flask import Flask, request , jsonify , json
 from flask_sqlalchemy import SQLAlchemy
 
 app=Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://idusujkn:T33CoBDMHG4sV9hAV-sBoVkVavKfOlB-@stampy.db.elephantsql.com:5432/idusujkn'
+#app.config['SQLALCHEMY_DATABASE_URI']= 'sqlite:///todo.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']= False
 db =SQLAlchemy(app)
-
 
 
 class todoApi(db.Model):
@@ -16,28 +16,39 @@ db.create_all()
 
 @app.route('/')
 def index():
-    return '<h1>ToDo Api</h1>'
+    return 'ToDo Api'
 
-@app.route('/todo/api/v1.0/tasks')
-def tasks():
-    task=db.get_all()
-    if not task:
-        return "no tasks yet"
-    else:
-        return task
+@app.route('/todo/api/v1.0/tasks', methods=['GET'])
+def show_tasks():
+    tasks = todoApi.query.all()
+    view=[]
+    for task in tasks:
+        task_list={}
+        task_list['id']=task.id
+        task_list['title']=task.title
+        task_list['done'] = task.done
+        view.append(task_list)
+    return jsonify({'task':view})
 
-@app.route('/TODO/api/v1.0/tasks/add', methods=['POST'])
-def add_task():
-    new=request.get_json()
+
+@app.route('/todo/api/v1.0/tasks/add', methods=['POST'])
+def add():
+    add = request.get_json()
     newTask=todoApi(title=new['title'],
                     done=True)
-    db.session.new(newTask)
+    db.session.add(newTask)
     db.session.commit()
     return('Task added successfully')
+    return jsonify({'prompt':'Added'})
 
-@app.route('/TODO/api/v1.0/tasks/remove/<task_id>', methods=['DELETE'])
-def delete_task(task_id):
-    db.remove_task(task_id)
+
+
+@app.route('/todo/api/v1.0/tasks/delete/<int:id>', methods=['DELETE'])
+def delete(id):
+    views=todoApi.query.filter_by(id=id).first()
+    db.session.delete(views)
+    db.session.commit()
+    return jsonify({'task':'deleted'})
     return ('Task Removed Successfully')
 
 
