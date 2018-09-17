@@ -1,137 +1,180 @@
-import React, {Component} from 'react'
-
+import React, { Component } from 'react'
+import Modal from "react-responsive-modal";
+import ListContainer from "./ListContainer";
+import swal from "sweetalert";
 class TodoList extends Component {
-    constructor(){
+    constructor() {
         super();
-
+        this.state = {
+            todos: [],
+            text: '',
+            desc: '',
+            open: false,
+            updatedTitle: '',
+            updatedDescription: ''
+        }
         this.addTodos = this.addTodos.bind(this);
         this.onchangeTodo = this.onchangeTodo.bind(this);
         this.onchangeDesc = this.onchangeDesc.bind(this);
         this.removeTodo = this.removeTodo.bind(this);
-        this.completeTodo = this.completeTodo.bind(this);
+        this.handleDoneStatus = this.handleDoneStatus.bind(this);
+        this.onOpenModal = this.onOpenModal.bind(this);
+        this.onCloseModal = this.onCloseModal.bind(this);
+        this.updateFunction = this.updateFunction.bind(this);
+    };updateFunctionupdateFunction
 
-        this.state = {
-            todos : [],
-            text: '',
-            desc: ''
-        }
-    }
+    // ****** modal's controllers *******
+    onOpenModal(title) {
+        this.setState({ open: true });
+        localStorage.setItem('title', title);
+    };
 
-    addTodos(e){
+    onCloseModal() {
+        this.setState({ open: false });
+    };
+
+    addTodos(e) {
         e.preventDefault();
-        // this.setState({todos: [...this.state.todos]});
-        //const {desc, text} = this.state;
+
         const newTodo = {
             text: this.state.text,
             desc: this.state.desc,
             status: false
         };
-        console.log(newTodo)
-        
-        this.setState((prevState)  => {
-            //console.log("Prevstate", prevState.todos)
-            //console.log('result', this.state.todos);
+
+        this.setState((prevState) => {
             return {
-                todos: prevState.todos.concat(newTodo) 
-            }            
+                todos: prevState.todos.concat(newTodo)
+            }
         });
-        this.setState({desc : ''});    
-        this.setState({text : ''});    
+        this.setState({ desc: '' });
+        this.setState({ text: '' });
     }
 
-    onchangeDesc(e) {        
-        this.setState({desc: e.target.value});
-        //console.log(e.target.value);
+    onchangeDesc(e) {
+        this.setState({ desc: e.target.value });
     }
 
     onchangeTodo(e) {
-        this.setState({text: e.target.value});
-        //console.log(e.target.value);
+        this.setState({ text: e.target.value });
     }
 
-    removeTodo(ind){
-        ind = ind - 1;
-        //console.log('event:', ind);
-        const slicedNewTodos = this.state.todos.slice(0, ind).concat(this.state.todos.slice(ind + 1));
-
-        //console.log('new:', slicedNewTodos);
-        this.setState({ todos: slicedNewTodos});
-    }
-
-    completeTodo(ind) {
-        ind = ind - 1;
-        //console.log('ind:', ind);
-
-        let array = this.state.todos;
-        array[ind].status = true;
-        
-        this.setState((prevState) => {
-            return {
-                todos : array
-            }
+    removeTodo(title) {
+        console.log('index called: ', title);
+        this.setState({
+            todos: this.state.todos.filter(item => item.text !== title)
         });
-        console.log('test:', this.state.todos);        
+        swal("Deleted!", "You task has been deleted", "success");
+
     }
-    
-    render(){
-        return(
-            <div className="container">
-                <div className="row">
-                    <div className="col-md-6 offset-md-3">
-                        <div>
-                            <br/><br/>
-                            <h3 className="text-danger">TodoList  (Part-2 Step-1)</h3>
-                            <form onSubmit={this.addTodos}>
-                                <div className="form-row">
-                                    <div className="form-group col-md-12">                                
-                                        <input type="text" value={this.state.text} onChange={this.onchangeTodo} className="form-control form-control-sm" aria-describedby="emailHelp" placeholder="Enter Todos" /> <br />
-                                        <input type="text" value={this.state.desc} onChange={this.onchangeDesc} className="form-control form-control-sm" aria-describedby="emailHelp" placeholder="Enter Description" />
-                                    </div>                                    
-                                </div>
 
-                                <div className="form-row">
-                                    <div className="form-group col-md-4">
-                                        <label htmlFor="test">&nbsp;</label>
-                                        <button type="submit" className="btn btn-primary btn-sm">Insert Todo</button>
-                                    </div>
+    handleDoneStatus(task) {  swal("Wohooo!", "You task has been updated", "success");
+        const newTodoList = this.state.todos.filter(todo => {
+            if (todo.text === task) {
+                todo.status = !todo.status;
+            }
+            return todo;
+        });
+        this.setState({
+            todos: newTodoList
+        });
+        
+    }
+    updateFunction(e) {
+        e.preventDefault();
+        let title = localStorage.getItem('title');
+        const newTodoList = this.state.todos.filter(todo => {
+            if (todo.text === title) {
+                todo.text = this.state.updatedTitle;
+                todo.desc = this.state.updatedDescription;
+            }
+            return todo;
+        });
+        
+       this.setState({
+            todos: newTodoList,
+            open: false
+        })
+        swal("Wohooo!", "You task has been updated", "success");
+    }
+render() {
+    const { open } = this.state;
+    return (
+        <div className="container">
+            <div className="row">
+                <div className="col-md-6 offset-md-3">
+                    <div>
+                        <br /><br />
+                        <h3 className="text-danger">TodoList  (Part-2 Step-1)</h3>
+                        <form onSubmit={this.addTodos}>test
+                            <div className="form-row">Good job!
+                                <div className="form-group col-md-12">
+                                    <input type="text" required value={this.state.text} onChange={this.onchangeTodo} className="form-control form-control-sm" aria-describedby="emailHelp" placeholder="Enter Todos" /> <br />
+                                    <input type="text" required value={this.state.desc} onChange={this.onchangeDesc} className="form-control form-control-sm" aria-describedby="emailHelp" placeholder="Enter Description" />
                                 </div>
-                            </form>
-                            
-                            <h4>All Todos</h4>
-                            <table className="table table-sm">
-                                <thead>
-                                    <tr>
-                                    <th>S #</th>
-                                    <th>Todos</th>
-                                    <th>Description</th>
-                                    <th>Complete</th>
-                                    <th>Delete</th>
-                                    
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {this.state.todos.map((todo, i) => {
-                                        return(
-                                            <tr key={i}>
-                                                <td>{i = i + 1}</td>
-                                                <td>{todo.text}</td>                                    
-                                                <td>{todo.desc}</td>
-                                                <td> {this.state.status === true ? 'Yes' : <a href="javascript:void(0)" onClick={() => this.completeTodo(i)}> No </a> } </td>
-                                                <td><a href="javascript:void(0)" onClick={() => { if (window.confirm('Are you sure you wish to delete this todo?')) this.removeTodo(i)}}><i className="fas fa-trash-alt"></i></a></td>
-                                            </tr>
-                                        )
+                            </div>
 
-                                    })}
-                                     
-                                </tbody>
-                            </table>
-                        </div>
+                            <div className="form-row">
+                                <div className="form-group col-md-4">
+                                    <label htmlFor="test">&nbsp;</label>
+                                    <button type="submit" className="btn btn-primary btn-sm">Insert Todo</button>
+                                </div>
+                            </div>
+                                
+                        </form>
+
+                        <h4>All Todos</h4>
+                        {this.state.todos.map((todo, i) => {
+                            return (
+                                <ListContainer
+                                    id={i + 1}
+                                    title={todo.text}
+                                    description={todo.desc}
+                                    status={todo.status}
+                                    removeFunction={this.removeTodo}
+                                    updateStatusFunction={this.handleDoneStatus}
+                                    onOpenModal={this.onOpenModal}
+                                />
+                            )
+
+                        })}
+
                     </div>
                 </div>
             </div>
+            <Modal open={open} onClose={this.onCloseModal} center>
+                <form onSubmit={this.updateFunction}>
+                    <div classNatesttestme="form-row">
+                        <div className="form-group col-md-12">
+                            <input
+                                type="text"
+                                onChange={(e) => { this.setState({ updatedTitle: e.target.value }) }}
+                                className="form-control form-control-sm"
 
-        )
-    }
+                                placeholder="Enter Todos"
+
+                            /> <br />
+                            <input
+                                type="text"
+                                onChange={(e) => { this.setState({ updatedDescription: e.target.value }) }}
+                                className="form-control form-control-sm"
+
+                                placeholder="Enter Description" />
+                        </div>
+                    </div>
+
+                    <div className="form-row">
+                        <div className="form-group col-md-4">
+                            <label htmlFor="test">&nbsp;</label>
+                            <button type="submit" className="btn btn-primary btn-sm">Insert Todo</button>
+                        </div>
+                    </div>
+                </form>
+            </Modal>
+        </div>
+
+    )
+}
 
 }
 
