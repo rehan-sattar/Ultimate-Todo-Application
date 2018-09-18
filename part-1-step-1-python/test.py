@@ -22,7 +22,9 @@ curl -i -H "Content-Type: application/json" -X PUT -d "{""name"": ""testing"",""
  
 #Deleting Task
 curl -i -H "Content-Type: application/json" -X DELETE http://127.0.0.1:5000/api/v.1.0/2
- 
+ #err: Deleting non-existing task
+curl -i -H "Content-Type: application/json" -X DELETE http://127.0.0.1:5000/api/v.1.0/2
+
 
 
 
