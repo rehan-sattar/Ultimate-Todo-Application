@@ -17,7 +17,7 @@ var Todo = class {
 	update(callback) {
 		const condition = this.payload.condition;
 		const update = this.payload.update;
-		todoModel.updateOne(condition, {$set:update}, callback)
+		todoModel.update(condition, {$set:update}, callback)
 	}
 
 	get(callback) {
