@@ -14,14 +14,20 @@ var Todo = class {
 		new todoModel(this.payload).save(callback);
 	}
 
+	update(callback) {
+		const condition = this.payload.condition;
+		const update = this.payload.update;
+		todoModel.updateOne(condition, {$set:update}, callback)
+	}
+
 	get(callback) {
 		const condition = this.payload.condition;
-		todoModel.find(condition, { _id: 0, __v: 0 }, { lean: true }, callback)
+		todoModel.findOne(condition, { _id: 0, __v: 0 }, { lean: true }, callback)
 	}
 
 	delete(callback) {
 		const condition = this.payload;
-		todoModel.deleteOne(condition, callback);
+		todoModel.remove(condition, callback);
 	}
 };
 module.exports = Todo;

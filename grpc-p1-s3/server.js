@@ -57,13 +57,32 @@ server.addService(todoproto.TodoService.service, {
 
 
     insert: function (call, callback) {
-
         var t = new TodoDb({
             id: call.request.id,
             title: call.request.title,
             description: call.request.description,
         });
         t.insert(callback);
+
+        // static code works without database
+        // var todo = call.request;
+        // todos.push(todo);
+        // callback(null, {});
+    },
+
+    update: function (call, callback) {
+        var payload = {
+            condition: {
+                id: call.request.id,
+            },
+            update: {
+                id: call.request.id,
+                title: call.request.title,
+                description: call.request.description,
+            }
+        };
+        var t = new TodoDb(payload);
+        t.update(callback);
 
         // static code works without database
         // var todo = call.request;

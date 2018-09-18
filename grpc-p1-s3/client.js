@@ -36,6 +36,17 @@ function insertTodo(id, title, description) {
     });
 }
 
+function updateTodo(id, title, description) {
+    var todo = {
+        id: parseInt(id),
+        title: title,
+        description: description
+    };
+    client.update(todo, function (error, todo) {
+        printResponse(error, todo);
+    });
+}
+
 function getTodo(id) {
     client.get({
         id: parseInt(id)
@@ -62,5 +73,7 @@ else if (command == 'insert')
     insertTodo(process.argv[0], process.argv[1], process.argv[2]);
 else if (command == 'get')
     getTodo(process.argv[0]);
+else if (command == 'update')
+    updateTodo(process.argv[0], process.argv[1], process.argv[2]);
 else if (command == 'delete')
     deleteTodo(process.argv[0]);
