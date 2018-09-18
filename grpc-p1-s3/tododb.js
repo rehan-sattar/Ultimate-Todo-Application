@@ -27,7 +27,7 @@ var Todo = class {
 
 	delete(callback) {
 		const condition = this.payload.condition;
-		todoModel.findByIdAndRemove(condition, callback);
+		todoModel.deleteOne(condition, callback);
 	}
 };
 module.exports = Todo;
