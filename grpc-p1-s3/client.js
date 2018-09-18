@@ -4,7 +4,9 @@ const grpc = require('grpc');
 var protoLoader = require('@grpc/proto-loader');
 
 var packageDefinition = protoLoader.loadSync(
-    PROTO_PATH, { keepCase: true, enums: String, defaults: true });
+    PROTO_PATH, {
+        keepCase: true, enums: String, defaults: true, arrays: true, objects: true, oneofs: true
+    });
 var todoproto = grpc.loadPackageDefinition(packageDefinition).todoproto;
 // The protoDescriptor object has the full package hierarchy
 
@@ -34,6 +36,17 @@ function insertTodo(id, title, description) {
     });
 }
 
+function updateTodo(id, title, description) {
+    var todo = {
+        id: parseInt(id),
+        title: title,
+        description: description
+    };
+    client.update(todo, function (error, todo) {
+        printResponse(error, todo);
+    });
+}
+
 function getTodo(id) {
     client.get({
         id: parseInt(id)
@@ -60,5 +73,7 @@ else if (command == 'insert')
     insertTodo(process.argv[0], process.argv[1], process.argv[2]);
 else if (command == 'get')
     getTodo(process.argv[0]);
+else if (command == 'update')
+    updateTodo(process.argv[0], process.argv[1], process.argv[2]);
 else if (command == 'delete')
     deleteTodo(process.argv[0]);
