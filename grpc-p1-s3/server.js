@@ -92,7 +92,7 @@ server.addService(todoproto.TodoService.service, {
 
     delete: function (call, callback) {
         var payload = {
-            condition= {
+            condition: {
                 id: call.request.id
             }
         };
