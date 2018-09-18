@@ -26,8 +26,8 @@ var Todo = class {
 	}
 
 	delete(callback) {
-		const condition = this.payload;
-		todoModel.remove(condition, callback);
+		const condition = this.payload.condition;
+		todoModel.findByIdAndRemove(condition, callback);
 	}
 };
 module.exports = Todo;
