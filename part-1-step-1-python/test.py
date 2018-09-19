@@ -1,120 +1,38 @@
-import app
-import requests
-import unittest
-class TestFlaskApiUsingRequests(unittest.TestCase):
-    def test_hello_world(self):
-        response = requests.get('http://localhost:5000')
-        self.assertEqual(response.json(), {'hello': 'world'})
+import os
 
 
-class TestFlaskApi(unittest.TestCase):
-    def setUp(self):
-        self.app = app.test_client()
+tests = """
+# getting all task
+curl -i http://127.0.0.1:5000/api/v.1.0
 
-    def test_hello_world(self):
-        response = self.app.get('/')
+# geting specific task by ID 1
+curl -i http://127.0.0.1:5000/api/v.1.0/1
 
-if __name__ == "__main__":
-    unittest.main()
-from copy import deepcopy
-import unittest
-import json
+#checking non-existing task
+curl -i http://127.0.0.1:5000/api/v.1.0/5
 
-import app
+#add new task
+curl -X POST -H "Content-Type: application/json" -d   "{""id"":4, ""name"": ""testing"",""done"": ""yes"",""priority"": ""high"",""desc"":""new task""}" http://127.0.0.1:5000/api/v.1.0
 
-BASE_URL = 'http://127.0.0.1:5000/api/v1.0/items'
-BAD_ITEM_URL = '{}/5'.format(BASE_URL)
-GOOD_ITEM_URL = '{}/3'.format(BASE_URL)
+# err: edit non-existing item
+curl -i -H "Content-Type: application/json" -X PUT -d '{\"name \": \"testing\",\"done\ ": \"yes\",\"priority\ ": \"high\ ",\"desc\":\"new task\ "}' http://127.0.0.1:5000/api/v.1.0/5
 
-
-class TestFlaskApi(unittest.TestCase):
-
-    def setUp(self):
-        self.backup_items = deepcopy(app.items)  # no references!
-        self.app = app.app.test_client()
-        self.app.testing = True
-
-    def test_get_all(self):
-        response = self.app.get(BASE_URL)
-        data = json.loads(response.get_data())
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(data['items']), 3)
-
-    def test_get_one(self):
-        response = self.app.get(BASE_URL)
-        data = json.loads(response.get_data())
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(data['items'][0]['name'], 'laptop')
-
-    def test_item_not_exist(self):
-        response = self.app.get(BAD_ITEM_URL)
-        self.assertEqual(response.status_code, 404)
-
-    def test_post(self):
-        # missing value field = bad
-        item = {"name": "some_item"}
-        response = self.app.post(BASE_URL,
-                                 data=json.dumps(item),
-                                 content_type='application/json')
-        self.assertEqual(response.status_code, 400)
-        # value field cannot take str
-        item = {"name": "screen", "value": 'string'}
-        response = self.app.post(BASE_URL,
-                                 data=json.dumps(item),
-                                 content_type='application/json')
-        self.assertEqual(response.status_code, 400)
-        # valid: both required fields, value takes int
-        item = {"name": "screen", "value": 200}
-        response = self.app.post(BASE_URL,
-                                 data=json.dumps(item),
-                                 content_type='application/json')
-        self.assertEqual(response.status_code, 201)
-        data = json.loads(response.get_data())
-        self.assertEqual(data['item']['id'], 4)
-        self.assertEqual(data['item']['name'], 'screen')
-        # cannot add item with same name again
-        item = {"name": "screen", "value": 200}
-        response = self.app.post(BASE_URL,
-                                 data=json.dumps(item),
-                                 content_type='application/json')
-        self.assertEqual(response.status_code, 400)
-
-    def test_update(self):
-        item = {"value": 30}
-        response = self.app.put(GOOD_ITEM_URL,
-                                data=json.dumps(item),
-                                content_type='application/json')
-        self.assertEqual(response.status_code, 200)
-        data = json.loads(response.get_data())
-        self.assertEqual(data['item']['value'], 30)
-        # proof need for deepcopy in setUp: update app.items should not affect self.backup_items
-        # this fails when you use shallow copy
-        self.assertEqual(self.backup_items[2]['value'], 20)  # org value
-
-    def test_update_error(self):
-        # cannot edit non-existing item
-        item = {"value": 30}
-        response = self.app.put(BAD_ITEM_URL,
-                                data=json.dumps(item),
-                                content_type='application/json')
-        self.assertEqual(response.status_code, 404)
-        # value field cannot take str
-        item = {"value": 'string'}
-        response = self.app.put(GOOD_ITEM_URL,
-                                data=json.dumps(item),
-                                content_type='application/json')
-        self.assertEqual(response.status_code, 400)
-
-    def test_delete(self):
-        response = self.app.delete(GOOD_ITEM_URL)
-        self.assertEqual(response.status_code, 204)
-        response = self.app.delete(BAD_ITEM_URL)
-        self.assertEqual(response.status_code, 404)
-
-    def tearDown(self):
-        # reset app.items to initial state
-        app.items = self.backup_items
+ # edit existing item
+curl -i -H "Content-Type: application/json" -X PUT -d "{""name"": ""testing"",""done"": ""yes"",""priority"": ""high"",""desc"":""new task""}" http://127.0.0.1:5000/api/v.1.0/1
+ 
+#Deleting Task
+curl -i -H "Content-Type: application/json" -X DELETE http://127.0.0.1:5000/api/v.1.0/2
+ #err: Deleting non-existing task
+curl -i -H "Content-Type: application/json" -X DELETE http://127.0.0.1:5000/api/v.1.0/2
 
 
-if __name__ == "__main__":
-    unittest.main()
+
+
+
+"""
+
+for line in tests.strip().split('\n'):
+    print('\n{}'.format(line))
+    if not line.startswith('#'):
+        cmd = line.strip()
+        os.system(cmd)

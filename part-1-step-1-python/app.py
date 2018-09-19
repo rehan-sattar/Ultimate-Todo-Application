@@ -1,8 +1,11 @@
 from flask import Flask ,request,jsonify
 from flask_pymongo import PyMongo
+from flask_cors import CORS
 
 
 app =Flask(__name__)
+CORS(app)
+
 app.config['MONGO_DBNAME']='todo'
 app.config['MONGO_URI'] = 'mongodb://todo:osama123@ds157742.mlab.com:57742/todo'
 
@@ -23,8 +26,8 @@ def get_allTask():
 
     for t in todo.find():
         data.append({'id':t['id'],'name': t['name'] ,'done': t['done'] ,'priority': t['priority'] ,'desc': t['desc']})
-        if data:
-            return jsonify({'task': data})
+    if data:
+        return jsonify({'task': data})
     return jsonify({"result":"No task found" })
 # search an specific with ID
 @app.route('/api/v.1.0/<int:id>' , methods=['GET'])
