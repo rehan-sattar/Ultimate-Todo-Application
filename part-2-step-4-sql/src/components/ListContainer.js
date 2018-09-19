@@ -14,7 +14,6 @@ const ListContainer = ({
         <div className="card mb-4" key={index}>
             <div className="card-body">
                 <table className="table" >
-                    {console.log(that)}
                     <tbody>
                         <tr>
                             <th>Todo no</th>
@@ -43,7 +42,7 @@ const ListContainer = ({
                                         ) : (
                                             <button
                                                 className="btn btn-warning text-white"
-                                                onClick={() => updateStatusFunction(todoId, that)}
+                                                onClick={() => updateStatusFunction(todoId)}
                                             >
                                                 Mark as done?
                                         </button>
@@ -57,7 +56,7 @@ const ListContainer = ({
                             <td>
                                 <button
                                     className="btn btn-block btn-success"
-                                    onClick={() => onOpenModal(todoId)}
+                                    onClick={() => onOpenModal(todoId , that)}
                                 >
 
                                     <i className="fa fa-pencil"></i>

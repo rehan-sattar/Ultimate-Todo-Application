@@ -12,14 +12,13 @@ class TodoList extends Component {
             desc: '',
             open: false,
             updatedTitle: '',
-            updatedDescription: ''
+            updatedDescription: '',
+            ref: undefined
         }
         this.downloadAllTodos = this.downloadAllTodos.bind(this);
         this.addTodos = this.addTodos.bind(this);
         this.onchangeTodo = this.onchangeTodo.bind(this);
         this.onchangeDesc = this.onchangeDesc.bind(this);
-        // this.removeTodo = this.removeTodo.bind(this);
-        // this.handleDoneStatus = this.handleDoneStatus.bind(this);
         this.onOpenModal = this.onOpenModal.bind(this);
         this.onCloseModal = this.onCloseModal.bind(this);
         this.updateFunction = this.updateFunction.bind(this);
@@ -45,9 +44,13 @@ class TodoList extends Component {
     }
 
     // ****** modal's controllers *******
-    onOpenModal(id) {
+    onOpenModal(id, that) {
         this.setState({ open: true });
         localStorage.setItem('id', id);
+        console.log(that);
+        this.setState({
+            ref: that
+        })
     };
 
     onCloseModal() {
@@ -126,15 +129,17 @@ class TodoList extends Component {
 
     // +================== update a todo ==============+
 
-    updateFunction(e, that) {
+    updateFunction(e) {
         e.preventDefault();
         const id = localStorage.getItem('id');
-        fetch(`https://localhost:5001/todo/api/v1.0/todos/${id}`, {
-            mehtod: 'put',
-            body: {
-                title: this.state.updatedTitle,
-                description: this.state.updatedDescription
-            },
+        console.log(id);
+        let todoObject = {
+            title: this.state.updatedTitle,
+            description: this.state.updatedDescription
+        }
+        fetch(`https://ultimate-todo-web-postgres.herokuapp.com/todo/api/v1.0/todos/487474aa-1dcf-4cbc-a085-e86302db0792`, {
+            method: "PUT",
+            body: JSON.stringify(todoObject),
             headers: {
                 'Content-Type': 'application/json',
             }
@@ -142,7 +147,7 @@ class TodoList extends Component {
             .then(res => res.json())
             .then(data => {
                 console.log(data);
-                that.downloadAllTodos();
+                this.state.ref.downloadAllTodos();
             })
     }
 
