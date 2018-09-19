@@ -19,9 +19,9 @@ node app.js
 ```
 
 #### Progress
-- [] gRPC
-- [] List All
-- [] Insert
-- [] Get
-- [] Update
-- [] Delete
+- [x] gRPC
+- [x] List All
+- [x] Insert
+- [x] Get
+- [x] Update
+- [x] Delete
