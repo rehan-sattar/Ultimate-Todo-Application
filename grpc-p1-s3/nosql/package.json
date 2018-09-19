@@ -1,7 +1,7 @@
 {
-  "name": "grpc-app",
+  "name": "grpc-nosql",
   "version": "0.1.0",
-  "description": "grpc part 1 step 3",
+  "description": "grpc part 1 step 3 using nosql(mongodb)",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
