@@ -1,84 +1,85 @@
 import React, { Component } from 'react'
 import Modal from "react-responsive-modal";
 import ListContainer from "./ListContainer";
-import swal from "sweetalert";
-import { apiEndPoint } from "../ApiEndPoint";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import {
+    downloadAllTodos,
+    addTodos,
+    removeTodo,
+    updateFunction,
+    markAsDone
+} from "../store/Actions";
+
 class TodoList extends Component {
     constructor() {
         super();
         this.state = {
             todos: [],
-            text: '',
-            desc: '',
+            title: '',
+            description: '',
             open: false,
+            status: false,
             updatedTitle: '',
-            updatedDescription: ''
+            updatedDescription: '',
+
         }
-        this.addTodos = this.addTodos.bind(this);
-        this.onchangeTodo = this.onchangeTodo.bind(this);
-        this.onchangeDesc = this.onchangeDesc.bind(this);
-        this.removeTodo = this.removeTodo.bind(this);
-        this.handleDoneStatus = this.handleDoneStatus.bind(this);
+
         this.onOpenModal = this.onOpenModal.bind(this);
         this.onCloseModal = this.onCloseModal.bind(this);
-        this.updateFunction = this.updateFunction.bind(this);
-    }; updateFunctionupdateFunction
+        this.addTodoHandler = this.addTodoHandler.bind(this);
+        this.updateTodoHandler = this.updateTodoHandler.bind(this);
+        this.removeTodoHandler = this.removeTodoHandler.bind(this);
+        this.markAsDoneHandler = this.markAsDoneHandler.bind(this);
 
+    };
+
+    componentDidMount() {
+        this.props._downloadAllTodos();
+    }
+
+    componentWillReceiveProps(props) {
+        console.log('component will Recieve props')
+        this.setState({
+            todos: props.todos
+        })
+    }
     // ****** modal's controllers *******
-    onOpenModal(title) {
+    onOpenModal(id) {
         this.setState({ open: true });
-        localStorage.setItem('title', title);
+        localStorage.setItem('id', id);
     };
 
     onCloseModal() {
         this.setState({ open: false });
     };
 
-    addTodos(e) {
+    addTodoHandler(e) {
         e.preventDefault();
+        this.props.addThisTodo(this.state);
+    };
 
+    removeTodoHandler(id) {
+        console.log(id);
+        this.props.removeAtodo(id);
+    };
 
-        fetch(`${apiEndPoint.link}/todo/api/v1.0/addTask`, {
-            method: "POST",
-            body: JSON.stringify({
-                text: this.state.text,
-                desc: this.state.desc,
-                status: false
-            }),
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-            .then(jsondocs => jsondocs.json())
-            .then(docs => {
-                console.log(docs);
-            })
-            .catch(error => {
-                console.log(error)
-            });
+    updateTodoHandler(e) {
+        e.preventDefault();
+        console.log(this.state);
+        let id = localStorage.getItem('id');
+        const updatedObject = {
+            id,
+            Title: this.state.updatedTitle,
+            Description: this.state.updatedDescription
+        };
+        this.props.updateThisTodo(updatedObject);
     }
 
-    onchangeDesc(e) {
-        this.setState({ desc: e.target.value });
+    markAsDoneHandler(id, status) {
+        this.props._markAsDone(id, status)
     }
 
-    onchangeTodo(e) {
-        this.setState({ text: e.target.value });
-    }
-
-    removeTodo(title) {
-        console.log('removeTodo')
-
-    }
-
-    handleDoneStatus(task) {
-        console.log('handleDoneTask')
-
-    }
-    updateFunction(e) {
-        console.log('update Function')
-
-    }
     render() {
         const { open } = this.state;
         return (
@@ -86,13 +87,24 @@ class TodoList extends Component {
                 <div className="row">
                     <div className="col-md-6 offset-md-3">
                         <div>
+
                             <br /><br />
                             <h3 className="text-danger">TodoList  (Part-2 Step-1)</h3>
-                            <form onSubmit={this.addTodos}>test
-                            <div className="form-row">Good job!
-                                <div className="form-group col-md-12">
-                                        <input type="text" required value={this.state.text} onChange={this.onchangeTodo} className="form-control form-control-sm" aria-describedby="emailHelp" placeholder="Enter Todos" /> <br />
-                                        <input type="text" required value={this.state.desc} onChange={this.onchangeDesc} className="form-control form-control-sm" aria-describedby="emailHelp" placeholder="Enter Description" />
+                            <form onSubmit={this.addTodoHandler}>
+                                <div className="form-row">
+                                    <div className="form-group col-md-12">
+                                        <input
+                                            type="text"
+                                            required
+                                            onChange={(e) => this.setState({ title: e.target.value })}
+                                            className="form-control form-control-sm"
+                                            placeholder="Enter Todos" /> <br />
+                                        <input
+                                            type="text"
+                                            required
+                                            onChange={(e) => this.setState({ description: e.target.value })}
+                                            className="form-control form-control-sm"
+                                            placeholder="Enter Description" />
                                     </div>
                                 </div>
 
@@ -109,13 +121,15 @@ class TodoList extends Component {
                             {this.state.todos.map((todo, i) => {
                                 return (
                                     <ListContainer
-                                        id={i + 1}
-                                        title={todo.text}
-                                        description={todo.desc}
-                                        status={todo.status}
-                                        removeFunction={this.removeTodo}
-                                        updateStatusFunction={this.handleDoneStatus}
+                                        index={i + 1}
+                                        id={todo._id}
+                                        title={todo.Title}
+                                        description={todo.Description}
+                                        status={todo.Done}
+                                        removeFunction={this.removeTodoHandler}
+                                        updateStatusFunction={this.markAsDoneHandler}
                                         onOpenModal={this.onOpenModal}
+                                        that={this}
                                     />
                                 )
 
@@ -125,7 +139,7 @@ class TodoList extends Component {
                     </div>
                 </div>
                 <Modal open={open} onClose={this.onCloseModal} center>
-                    <form onSubmit={this.updateFunction}>
+                    <form onSubmit={this.updateTodoHandler}>
                         <div classNatesttestme="form-row">
                             <div className="form-group col-md-12">
                                 <input
@@ -160,15 +174,18 @@ class TodoList extends Component {
 
 }
 
-export default TodoList;
+const mapStateToProps = (state) => ({
+    todos: state.todos
+});
 
+const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators({
+        _downloadAllTodos: () => downloadAllTodos(), //..,
+        removeAtodo: (id) => removeTodo(id), //...,
+        updateThisTodo: (updatedObject) => updateFunction(updatedObject),  // ... 
+        addThisTodo: (todoObject) => addTodos(todoObject),
+        _markAsDone: (id, status) => markAsDone(id, status)  // ........
+    }, dispatch)
+}
+export default connect(mapStateToProps, mapDispatchToProps)(TodoList);
 
-
-
-// all routes: 
-
-// /todo/api/v1.0/tasks => add task
-// /todo/api/v1.0/tasks/:id => get a specific task
-// /todo/api/v1.0/tasks/:id => update a task
-// /todo/api/v1.0/tasks/:id => delete a task
-// /todo/api/v1.0/tasks => get All tasks

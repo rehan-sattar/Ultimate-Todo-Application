@@ -2,20 +2,22 @@ import React from "react";
 
 const ListContainer = ({
     id,
+    index,
     title,
     description,
     status,
     removeFunction,
     onOpenModal,
-    updateStatusFunction
+    updateStatusFunction,
+    that
 }) => (
-        <div className="card mb-4" key={id}>
+        <div className="card mb-4" key={index}>
             <div className="card-body">
                 <table className="table" >
                     <tbody>
                         <tr>
                             <th>Todo no</th>
-                            <td>{id}</td>
+                            <td>{index}</td>
                         </tr>
                         <tr>
                             <th>Title</th>
@@ -34,13 +36,13 @@ const ListContainer = ({
                                         (
                                             <button 
                                                 className="btn btn-success text-white"
-                                                onClick={ () => updateStatusFunction(title) }
+                                                onClick={ () => updateStatusFunction(id , false) }
                                                 > <i className="fa fa-check"></i> Undo?  </button>
 
                                         ) : (
                                             <button
                                                 className="btn btn-warning text-white"
-                                                onClick={() => updateStatusFunction(title)}
+                                                onClick={() => updateStatusFunction(id, true)}
                                             >
                                                 Mark as done?
                                         </button>
@@ -54,7 +56,7 @@ const ListContainer = ({
                             <td>
                                 <button
                                     className="btn btn-block btn-success"
-                                    onClick={() => onOpenModal(title)}
+                                    onClick={() => onOpenModal(id , that)}
                                 >
 
                                     <i className="fa fa-pencil"></i>
@@ -65,7 +67,7 @@ const ListContainer = ({
                                 <button
                                     className="btn btn-block btn-danger"
                                     onClick={() => {
-                                        removeFunction(title)
+                                        removeFunction(id , that)
                                     }}>
                                     <i className="fas fa-trash-alt"></i>
                                     &nbsp; Delete
