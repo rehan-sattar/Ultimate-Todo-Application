@@ -15,12 +15,6 @@ function printResponse(error, response) {
         console.log(response);
 }
 
-function todosList() {
-    client.list({}, function (error, data) {
-        printResponse(error, data);
-    });
-}
-
 function insertTodo(title, description) {
     var todo = {
         title: title,
@@ -28,14 +22,6 @@ function insertTodo(title, description) {
     };
     client.insert(todo, function (error, empty) {
         printResponse(error, empty);
-    });
-}
-
-function getTodo(id) {
-    client.get({
-        id: parseInt(id)
-    }, function (error, todo) {
-        printResponse(error, todo);
     });
 }
 

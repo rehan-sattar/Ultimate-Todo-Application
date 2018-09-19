@@ -11,30 +11,13 @@ const server = new grpc.Server();
 
 server.addService(todoproto.TodoService.service, {
 
-    list: function (_, callback) {
-        db.all(`SELECT * FROM Todos`, (err, rows) => {
-            callback(null, rows)
-        });
-    },
-
-    insert: function (call, callback) {
+    insert: function(call, callback) {
         db.all(`INSERT INTO Todos (title, description) VALUES ("${call.request.title}", "${call.request.description}")`, (err) => {
             if (!err) {
                 callback(null, { status: "success" })
             } else {
                 callback(null, { status: "failed" })
             }
-        })
-    },
-
-    get: function (call, callback) {
-        db.all(`SELECT * FROM Todos WHERE id = "${call.request.id}"`, (err, row) => {
-            var todo = {
-                id: row[0].id,
-                title: row[0].name,
-                description: row[0].address
-            }
-            callback(null, todo)
         })
     }
 
