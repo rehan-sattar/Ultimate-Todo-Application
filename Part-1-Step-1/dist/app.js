@@ -19,6 +19,7 @@ class App {
         this.app.use(methodOverride());
         this.app.use(bodyParser.urlencoded({ extended: false }));
         this.app.use(bodyParser.json());
+        const Port = process.env.PORT || 5000;
         this.app.use((req, res, next) => {
             res.header("Access-Control-Allow-Origin", "*");
             res.header("Access-Control-Allow-Credentials", "true");
@@ -27,6 +28,9 @@ class App {
             next();
         });
         this.routePrv.routes(this.app);
+        this.app.listen(Port, () => {
+            console.log("Express Server Listening On Port " + Port);
+        });
     }
 }
 exports.default = new App().app;
