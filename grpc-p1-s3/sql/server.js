@@ -1,64 +1,64 @@
-var sqlite3 = require('sqlite3').verbose()
-var db = new sqlite3.Database('todo.db')
-
 const PROTO_PATH = __dirname + '../../protos/todo.proto';
 const grpc = require('grpc');
 var protoLoader = require('@grpc/proto-loader');
+const { Client } = require('pg')
 
+
+// gRPC
 var packageDefinition = protoLoader.loadSync(PROTO_PATH, { keepCase: true, enums: String, defaults: true, oneofs: true });
 var todoproto = grpc.loadPackageDefinition(packageDefinition).todoproto;
 const server = new grpc.Server();
 
+
+// Postgress
+const connectionString = 'postgresql://root:root@localhost:5432/todo'
+const db = new Client({
+    connectionString: connectionString,
+})
+db.connect((err) => {
+    if (err) throw err;
+    console.log('postgres connected')
+
+})
+
+
 server.addService(todoproto.TodoService.service, {
 
     list: function (_, callback) {
-        db.all(`SELECT * FROM Todos`, (err, rows) => {
-            callback(null, rows)
-        });
+
+        db.query(`SELECT * FROM Todos`, (err, res) => {
+            if (err) throw err;
+            callback(null, res)
+        })
     },
 
     insert: function (call, callback) {
-        db.all(`INSERT INTO Todos (title, description) VALUES ("${call.request.title}", "${call.request.description}")`, (err) => {
-            if (!err) {
-                callback(null, { status: "success" })
-            } else {
-                callback(null, { status: "failed" })
-            }
+        db.query('INSERT INTO Todos (title, description, date) VALUES ($1, $2, $3)', [call.request.title, call.request.description, new Date()], (err) => {
+            if (err) throw err;
+            callback(null, { status: "success" })
         })
     },
 
     get: function (call, callback) {
-        db.all(`SELECT * FROM Todos WHERE id = "${call.request.id}"`, (err, row) => {
-            var todo = {
-                id: row[0].id,
-                title: row[0].title,
-                description: row[0].description
-            }
-            callback(null, todo)
+        db.query('SELECT * FROM Todos WHERE id = $1',[call.request.id], (err, res) => {
+            if (err) throw err;
+            callback(null, res.rows[0])
         })
     },
 
     update: function (call, callback) {
-        db.all(`UPDATE Todos SET title = "${call.request.title}", description ="${call.request.description}" WHERE id = "${call.request.id}"`, (err) => {
-            if (!err) {
-                callback(null, { status: "success" })
-            } else {
-                callback(null, { status: "failed" })
-            }
+        db.query('UPDATE Todos SET title = $1, description =$2  WHERE id = $3', [call.request.title, call.request.description, call.request.id], (err) => {
+            if (err) throw err;
+            callback(null, { status: "success" })
         })
     },
 
     delete: function (call, callback) {
-        db.all(`DELETE FROM Todos WHERE id = "${call.request.id}"`, (err) => {
-            if (!err) {
-                callback(null, { status: "success" })
-            } else {
-                callback(null, { status: "failed" })
-            }
+        db.query('DELETE FROM Todos WHERE id = $1', [call.request.id], (err) => {
+            if (err) throw err;
+            callback(null, { status: "success" })
         })
     }
-
-
 
 });
 

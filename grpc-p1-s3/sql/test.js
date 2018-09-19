@@ -1,29 +1,44 @@
-var sqlite3 = require('sqlite3').verbose()
-var db = new sqlite3.Database('todo.db')
 
-var data = [];
-db.serialize(function () {
+const { Client } = require('pg')
+const connectionString = 'postgresql://root:root@localhost:5432/todo'
+const db = new Client({
+    connectionString: connectionString,
+})
+db.connect((err) => {
+    if (err) {
+        console.error('connection error', err.stack)
+    } else {
+        console.log('Postgres Connected')
+    }
+})
+
+try{
+db.query('INSERT INTO Todos (title, description, date) VALUES ($1, $2, $3)', ["Kam karna hai", "Kam kar k Paisa Kamana hai", new Date()], (err) => {
+  if (err) throw err;
+  console.log("Insert Query Passed")
+})
+}catch (err){if(!err){  console.log("Get One Query Passed")
+}}
+
+try{
+  db.query(`SELECT * FROM Todos`, (err, res) => {
+    if (err) throw err;
+    console.log("Get All Query Passed")
+})
+}catch (err){if(!err){  console.log("Get One Query Passed")
+}}
 
 
-  db.run(`INSERT INTO Todos (title, description) VALUES ("hello", "world")`, function (err, data) {
-  })
+try{
+const query = {
+  name: 'fetch-todo',
+  text: 'SELECT * FROM Todos WHERE id = $1',
+  values: [2]
+}
+db.query(query, (err, res) => {
+  if (err) throw err;
+})
+}catch (err){if(!err){  console.log("Get One Query Passed")
+}}
 
-  // db.each(`SELECT * FROM Todos WHERE id = 2`, function (err, row) {
-  //   data.push(row);
-  // }, function (err, rowCount) {
-  //   console.log(data);
-  // });
-
-  db.each(`SELECT * FROM Todos`, function (err, row) {
-    data.push(row);
-  }, function (err, rowCount) {
-    console.log(data);
-  });
-
-});
-
-
-
-
-db.close
 
