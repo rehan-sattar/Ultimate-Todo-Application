@@ -11,6 +11,6 @@ This Application works with two different DB's follow links for your interest DB
 
 **[gRPC with NoSQl(MongoDB)](https://github.com/Rehan-Sattar/Ultimate-Todo-Application/tree/master/grpc-p1-s3/nosql)**
 
-**[gRPC with SQl ()](https://github.com/Rehan-Sattar/Ultimate-Todo-Application/tree/master/grpc-p1-s3/sql)**
+**[gRPC with SQl (PostgresDB)](https://github.com/Rehan-Sattar/Ultimate-Todo-Application/tree/master/grpc-p1-s3/sql)**
 
 
