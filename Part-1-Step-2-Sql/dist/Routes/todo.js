@@ -16,6 +16,8 @@ class Routes {
         app.route("/todo/api/v1.0/todos/:id").put(this.todocontroller.UpdateTodo);
         //DELETE A TODO
         app.route("/todo/api/v1.0/todos/:id").delete(this.todocontroller.DeleteTodo);
+        //UPDATE THE IF TODO DONE/UNDONE
+        app.route("/todo/api/v1.0/todos/done/:id").put(this.todocontroller.UpdateDone);
     }
 }
 exports.default = Routes;

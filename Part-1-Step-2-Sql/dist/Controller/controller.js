@@ -15,7 +15,7 @@ const config = {
     user: "oxwwzbajkyvyiv",
     password: "6db119531d151863acb80753592f431dd65b41a3a450eb6be3348f6609ce6d42",
     database: "d25vaam4oclrc0"
-  };
+};
 class TodoController {
     AddNewTodo(req, res) {
         const client = new pg.Client(config);
@@ -77,6 +77,33 @@ class TodoController {
             });
         })();
     }
+    UpdateDone(req, res) {
+        const client = new pg.Client(config);
+        client.connect();
+        const { done } = req.body;
+        const { id } = req.params;
+        (function hit() {
+            return __awaiter(this, void 0, void 0, function* () {
+                try {
+                    const response = yield client.query(`UPDATE TODO 
+        SET DONE = $1
+        WHERE ID = $2`, [done, id]);
+                    client.end();
+                    const resSend = response.rowCount
+                        ? (done
+                            ? { message: "Todo added to done list successfully", status: true }
+                            : { message: "Todo added to undone list successfully", status: true })
+                        : { message: "Unable update a todo", status: false };
+                    res.status(200).send([resSend]);
+                }
+                catch (err) {
+                    res
+                        .status(500)
+                        .send([{ message: "Unable to update", status: false }, err]);
+                }
+            });
+        })();
+    }
     UpdateTodo(req, res) {
         const client = new pg.Client(config);
         client.connect();
@@ -102,6 +129,7 @@ class TodoController {
             });
         })();
     }
+    /**/
     DeleteTodo(req, res) {
         const client = new pg.Client(config);
         client.connect();

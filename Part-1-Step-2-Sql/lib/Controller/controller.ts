@@ -69,6 +69,36 @@ class TodoController {
     })();
   }
 
+  public UpdateDone(req: Request, res: Response) {
+    const client = new pg.Client(config);
+    client.connect();
+    const { done } = req.body;
+    const { id } = req.params;
+    (async function hit() {
+      try {
+        const response = await client.query(
+          `UPDATE TODO 
+        SET DONE = $1
+        WHERE ID = $2`,
+          [done, id]
+        );
+        client.end();
+        const resSend = response.rowCount
+          ? (
+            done
+            ? { message: "Todo added to done list successfully", status: true }
+            : { message: "Todo added to undone list successfully", status: true }
+            )
+          : { message: "Unable update a todo", status: false };
+        res.status(200).send([resSend]);
+      } catch (err) {
+        res
+          .status(500)
+          .send([{ message: "Unable to update", status: false }, err]);
+      }
+    })();
+  }
+
   public UpdateTodo(req: Request, res: Response) {
     const client = new pg.Client(config);
     client.connect();
@@ -94,6 +124,8 @@ class TodoController {
       }
     })();
   }
+
+  /**/
 
   public DeleteTodo(req: Request, res: Response) {
     const client = new pg.Client(config);
