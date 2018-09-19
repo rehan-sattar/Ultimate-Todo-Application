@@ -6,7 +6,7 @@ Mongoose.connect(mongoDB, { useNewUrlParser: true })
     .then(() => console.log('Mongodb connection succesful'))
     .catch((err) => console.error(err));
 Mongoose.set('useCreateIndex', true);
-const TodoDb = require('./tododb');
+const TodoDb = require('../tododb');
 
 
 var assert = {
