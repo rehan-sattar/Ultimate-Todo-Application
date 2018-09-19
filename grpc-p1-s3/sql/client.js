@@ -39,6 +39,25 @@ function getTodo(id) {
     });
 }
 
+function updateTodo(id, title, description) {
+    var todo = {
+        id: parseInt(id),
+        title: title,
+        description: description
+    };
+    client.update(todo, function (error, empty) {
+        printResponse(error, empty);
+    });
+}
+
+function deleteTodo(id) {
+    client.delete({
+        id: parseInt(id)
+    }, function (error, empty) {
+        printResponse(error, empty);
+    });
+}
+
 
 
 var processName = process.argv.shift();

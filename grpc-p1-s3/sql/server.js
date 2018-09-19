@@ -36,7 +36,29 @@ server.addService(todoproto.TodoService.service, {
             }
             callback(null, todo)
         })
+    },
+
+    update: function (call, callback) {
+        db.all(`UPDATE Todos SET title = "${call.request.title}", description ="${call.request.description}" WHERE id = "${call.request.id}"`, (err) => {
+            if (!err) {
+                callback(null, { status: "success" })
+            } else {
+                callback(null, { status: "failed" })
+            }
+        })
+    },
+
+    delete: function (call, callback) {
+        db.all(`DELETE FROM Todos WHERE id = "${call.request.id}"`, (err) => {
+            if (!err) {
+                callback(null, { status: "success" })
+            } else {
+                callback(null, { status: "failed" })
+            }
+        })
     }
+
+
 
 });
 
