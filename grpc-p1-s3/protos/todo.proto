@@ -23,7 +23,7 @@ message Todo {
 }
 
 message TodoList {
-  repeated Todo todos = 1;
+  repeated Todo todo = 1;
 }
 
 message TodoId {

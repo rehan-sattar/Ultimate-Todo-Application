@@ -1,5 +1,5 @@
 
-const PROTO_PATH = __dirname + '../../protos/todo.proto';
+const PROTO_PATH = __dirname + '../../../protos/todo.proto';
 const grpc = require('grpc');
 var protoLoader = require('@grpc/proto-loader');
 
@@ -8,7 +8,7 @@ var todoproto = grpc.loadPackageDefinition(packageDefinition).todoproto;
 const server = new grpc.Server();
 
 global.Mongoose = require('mongoose');
-var mongoDB = 'mongodb://localhost/grpctodo';
+var mongoDB = 'mongodb://localhost/todo';
 Mongoose.Promise = global.Promise;
 Mongoose.connect(mongoDB, { useNewUrlParser: true })
     .then(() => console.log('Mongodb connection succesful'))
