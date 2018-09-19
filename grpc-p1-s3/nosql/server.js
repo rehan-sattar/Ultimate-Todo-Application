@@ -1,15 +1,10 @@
 
-const PROTO_PATH = __dirname + '/todo.proto';
+const PROTO_PATH = __dirname + '../../protos/todo.proto';
 const grpc = require('grpc');
 var protoLoader = require('@grpc/proto-loader');
 
-var packageDefinition = protoLoader.loadSync(
-    PROTO_PATH, {
-        keepCase: true, enums: String, defaults: true, oneofs: true
-    });
-
+var packageDefinition = protoLoader.loadSync(PROTO_PATH, { keepCase: true, enums: String, defaults: true, oneofs: true });
 var todoproto = grpc.loadPackageDefinition(packageDefinition).todoproto;
-
 const server = new grpc.Server();
 
 global.Mongoose = require('mongoose');

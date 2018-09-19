@@ -1,4 +1,4 @@
-## [gRPC with NoSQl(MongoDB)](https://github.com/Rehan-Sattar/Ultimate-Todo-Application/grpc-p1-s3/sql)
+## [gRPC with SQl ()](https://github.com/Rehan-Sattar/Ultimate-Todo-Application/tree/master/grpc-p1-s3/sql)
 
 ### Clone
 ```
