@@ -1,0 +1,1 @@
+{"version":3,"sources":["index.css"],"names":[],"mappings":"gEACA,KACE,SACA,UACA,4BAAiC","file":"static/css/main.867e728e.css","sourcesContent":["@import url('https://fonts.googleapis.com/css?family=Bree+Serif');\r\nbody {\r\n  margin: 0;\r\n  padding: 0;\r\n  font-family: 'Bree Serif', serif;\r\n}\r\n\n\n\n// WEBPACK FOOTER //\n// ./src/index.css"],"sourceRoot":""}
