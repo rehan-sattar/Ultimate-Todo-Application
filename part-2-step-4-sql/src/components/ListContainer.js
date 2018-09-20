@@ -36,13 +36,13 @@ const ListContainer = ({
                                         (
                                             <button
                                                 className="btn btn-success text-white"
-                                                onClick={() => updateStatusFunction(todoId)}
+                                                onClick={() => updateStatusFunction(todoId, false)}
                                             > <i className="fa fa-check"></i> Undo?  </button>
 
                                         ) : (
                                             <button
                                                 className="btn btn-warning text-white"
-                                                onClick={() => updateStatusFunction(todoId)}
+                                                onClick={() => updateStatusFunction(todoId, true)}
                                             >
                                                 Mark as done?
                                         </button>

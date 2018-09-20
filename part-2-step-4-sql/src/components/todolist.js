@@ -23,6 +23,7 @@ class TodoList extends Component {
         this.onCloseModal = this.onCloseModal.bind(this);
         this.updateFunction = this.updateFunction.bind(this);
         this.getSpecificTask = this.getSpecificTask.bind(this);
+        this.handleDoneStatus = this.handleDoneStatus.bind(this);
     };
 
     componentDidMount() {
@@ -105,6 +106,7 @@ class TodoList extends Component {
             .then(data => {
                 console.log(data)
                 that.downloadAllTodos()
+                swal('Task deleted!', 'Your task has been deleted.', 'success');
             })
             .catch(err => console.log(err));
     }
@@ -122,9 +124,22 @@ class TodoList extends Component {
     }
 
 
-    handleDoneStatus(task) {
+    handleDoneStatus(id, status) {
         console.log('handleDoneTask')
-
+        fetch(`https://ultimate-todo-web-postgres.herokuapp.com/todo/api/v1.0/todos/done/${id}`, {
+            method: "PUT",
+            body: JSON.stringify({
+                done: status
+            }),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(res => res.json())
+            .then(data => {
+                this.downloadAllTodos();
+                swal('Task done status updated!', 'Thanks for using me!', 'success');
+            })
     }
 
     // +================== update a todo ==============+
@@ -148,10 +163,16 @@ class TodoList extends Component {
             .then(data => {
                 console.log(data);
                 this.state.ref.downloadAllTodos();
+                this.onCloseModal();
+                swal('Task updated!', 'Your task has been upadated.', 'success');
             })
     }
 
-    // + ====================== render method ================+
+
+    // +================ CheckDOneStatus ===============+
+
+
+    // + ====================== render metho d ================+
     render() {
         const { open } = this.state;
         return (
@@ -185,7 +206,7 @@ class TodoList extends Component {
                                         todoId={todo.id}
                                         title={todo.title}
                                         description={todo.description}
-                                        status={todo.status}
+                                        status={todo.done}
                                         removeFunction={this.removeTodo}
                                         updateStatusFunction={this.handleDoneStatus}
                                         onOpenModal={this.onOpenModal}
