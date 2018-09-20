@@ -5,15 +5,29 @@
   "main": "dist/server.js",
   "scripts": {
     "build": "tsc",
-    "dev": "ts-node ./lib/server.ts",
-    "start": "nodemon ./dist/server.js",
-    "prod": "npm run build && npm run start"
+    "dev": "ts-node ./lib/app.ts",
+    "start": "node ./dist/app.js",
+    "prod": "npm run build && npm run start",
+    "test": "mocha **/todoschema.test.js"
   },
   "author": "syed_kashan-adil",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "chai-http": "^4.2.0",
+    "cors": "^2.8.4",
     "express": "^4.16.3",
-    "mongoose": "^5.2.14"
+    "helmet-csp": "^2.7.1",
+    "method": "^2.0.0",
+    "method-override": "^3.0.0",
+    "mongoose": "^5.2.14",
+    "morgan": "^1.9.1",
+    "override": "0.0.1",
+    "sinon": "^6.3.3",
+    "sinon-mongoose": "^2.2.1"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^3.0.0"
   }
 }

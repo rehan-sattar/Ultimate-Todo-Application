@@ -25,26 +25,33 @@ class Form extends Component {
     render() {
         return (
             <div>
-                <fieldset>
-                    <legend>Ultimate Todo App</legend>
-                    <form onSubmit={this.handleSubmitForm}>
-                        <input
-                            type="text"
-                            placeholder="Title"
-                            required
-                            onChange={(e) => this.setState({ title: e.target.value })} />
-                        <br />
-                        <br />
-                        <textarea
-                            placeholder="Description"
-                            required
-                            onChange={(e) => this.setState({ description: e.target.value })} >
-                        </textarea>
-                        <br />
-                        <br />
-                        <button type={"Submit"}>Add Task</button>
-                    </form>
-                </fieldset>
+                <div className="container">
+                    <div className="row justify-content-center">
+                        <div className="col-md-8 col-lg-8 col-sm-12 m-5 p-5 bg-white">
+                            <h2 className="tex-center">Add your Daily tasks</h2>
+                            <form onSubmit={this.handleSubmitForm}>
+                                <input
+                                    type="text"
+                                    placeholder="Title"
+                                    required
+                                    className="form-control"
+                                    onChange={(e) => this.setState({ title: e.target.value })} />
+                                <br />
+                                <br />
+                                <textarea
+                                    placeholder="Description"
+                                    required
+                                    className="form-control"
+                                    onChange={(e) => this.setState({ description: e.target.value })} >
+                                </textarea>
+                                <br />
+                                <br />
+                                <button type={"Submit"} className="btn btn-primary btn-lg">Add Task</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         );
     };

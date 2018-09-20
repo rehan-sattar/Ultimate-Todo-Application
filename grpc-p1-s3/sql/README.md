@@ -1,4 +1,4 @@
-## [gRPC with SQl ()](https://github.com/Rehan-Sattar/Ultimate-Todo-Application/tree/master/grpc-p1-s3/sql)
+## [gRPC with SQl (PostgresDB)](https://github.com/Rehan-Sattar/Ultimate-Todo-Application/tree/master/grpc-p1-s3/sql)
 
 ### Clone
 ```
@@ -37,3 +37,4 @@ node grpcclienttest.js delete 1
 - [x] Get
 - [x] Update
 - [x] Delete
+
