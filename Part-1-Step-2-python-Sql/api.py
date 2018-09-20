@@ -42,7 +42,6 @@ def add():
     return jsonify({'prompt':'Added'})
 
 
-
 @app.route('/todo/api/v1.0/tasks/delete/<int:id>', methods=['DELETE'])
 def delete(id):
     views=todoApi.query.filter_by(id=id).first()
@@ -51,6 +50,19 @@ def delete(id):
     return jsonify({'task':'deleted'})
     return ('Task Removed Successfully')
 
+@app.route('/todo/api/v1.0/tasks/update/<id>', methods=['PUT'])
+def update(id):
+    task=todoApi.query.filter_by(id=id).first()
+    if not task:
+        return 'No task found'
+    else:
+        update=request.get_json()
+
+        updateTask={'id':task.id}
+        updateTask['title']=update['title']
+        updateTask['done']=True
+        db.session.commit()
+        return "Task Updated Successfully"
 
 app.run(debug=True)
 
