@@ -12,6 +12,8 @@ db.connect((err) => {
     }
 })
 
+
+// insert into db
 try{
 db.query('INSERT INTO Todos (title, description, date) VALUES ($1, $2, $3)', ["Kam karna hai", "Kam kar k Paisa Kamana hai", new Date()], (err) => {
   if (err) throw err;
@@ -20,6 +22,8 @@ db.query('INSERT INTO Todos (title, description, date) VALUES ($1, $2, $3)', ["K
 }catch (err){if(!err){  console.log("Get One Query Passed")
 }}
 
+
+// select all todos
 try{
   db.query(`SELECT * FROM Todos`, (err, res) => {
     if (err) throw err;
@@ -28,7 +32,7 @@ try{
 }catch (err){if(!err){  console.log("Get One Query Passed")
 }}
 
-
+// get one record
 try{
 const query = {
   name: 'fetch-todo',
