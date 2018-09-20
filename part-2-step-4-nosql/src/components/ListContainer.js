@@ -31,23 +31,22 @@ const ListContainer = ({
                         <tr>
                             <th>Status</th>
                             <td>
-                                {
-                                    status ?
-                                        (
-                                            <button 
-                                                className="btn btn-success text-white"
-                                                onClick={ () => updateStatusFunction(id , false) }
-                                                > <i className="fa fa-check"></i> Undo?  </button>
+                                {status ?
+                                    (
+                                        <button
+                                            className="btn btn-success text-white"
+                                            onClick={() => updateStatusFunction(id, false)}
+                                        > <i className="fa fa-check"></i> Undo?  </button>
 
-                                        ) : (
-                                            <button
-                                                className="btn btn-warning text-white"
-                                                onClick={() => updateStatusFunction(id, true)}
-                                            >
-                                                Mark as done?
+                                    ) : (
+                                        <button
+                                            className="btn btn-warning text-white"
+                                            onClick={() => updateStatusFunction(id, true)}
+                                        >
+                                            Mark as done?
                                         </button>
 
-                                        )
+                                    )
                                 }
                             </td>
 
@@ -56,7 +55,7 @@ const ListContainer = ({
                             <td>
                                 <button
                                     className="btn btn-block btn-success"
-                                    onClick={() => onOpenModal(id , that)}
+                                    onClick={() => onOpenModal(id, that)}
                                 >
 
                                     <i className="fa fa-pencil"></i>
@@ -67,7 +66,7 @@ const ListContainer = ({
                                 <button
                                     className="btn btn-block btn-danger"
                                     onClick={() => {
-                                        removeFunction(id , that)
+                                        removeFunction(id, that)
                                     }}>
                                     <i className="fas fa-trash-alt"></i>
                                     &nbsp; Delete
@@ -82,3 +81,4 @@ const ListContainer = ({
 
 
 export default ListContainer;
+

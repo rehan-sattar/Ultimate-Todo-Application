@@ -1,5 +1,7 @@
+import swal from "sweetalert";
 function downloadAllTodos() {
     return dispatch => {
+        console.log('triggered');
         fetch(`https://nodejs-todo-server.herokuapp.com/todo/api/v1.0/tasks/`, {
             method: 'GET'
         })
@@ -13,11 +15,7 @@ function downloadAllTodos() {
             });
     }
 }
-
-
-
 function addTodos({ title, description }) {
-    console.log('inside add todo ', title, description)
     return dispatch => {
         fetch(`https://nodejs-todo-server.herokuapp.com/todo/api/v1.0/tasks/ `, {
             method: "POST",
@@ -32,10 +30,18 @@ function addTodos({ title, description }) {
             .then(res => res.json())
             .then(data => {
                 if (data.status == true) {
-                    dispatch({
-                        type: 'TODO_ADDED',
-                        payload: data
+                    swal('Task Added!', 'Your todo has beed added', 'success');
+                    fetch(`https://nodejs-todo-server.herokuapp.com/todo/api/v1.0/tasks/`, {
+                        method: 'GET'
                     })
+                        .then(res => res.json())
+                        .then(data => {
+                            dispatch({
+                                type: 'ALL_TODOS',
+                                payload: data
+                            })
+                        });
+                    // downloadAllTodos();
                 }
             })
             .catch(error => {
@@ -43,7 +49,6 @@ function addTodos({ title, description }) {
             });
     }
 }
-
 
 function removeTodo(id) {
     return dispatch => {
@@ -53,12 +58,21 @@ function removeTodo(id) {
             .then(res => res.json())
             .then(data => {
                 if (data.status === true) {
-                    dispatch({
-                        type: 'TODO_DELETED',
-                        paylod: data
+                    swal('Task deleted!', 'Your todo has beed deleted', 'success');
+                    fetch(`https://nodejs-todo-server.herokuapp.com/todo/api/v1.0/tasks/`, {
+                        method: 'GET'
                     })
+                        .then(res => res.json())
+                        .then(data => {
+                            dispatch({
+                                type: 'ALL_TODOS',
+                                payload: data
+                            })
+                        });
+                    // downloadAllTodos();
                 }
-            })
+            }
+            )
             .catch(err => console.log(err));
     }
 
@@ -66,7 +80,7 @@ function removeTodo(id) {
 
 
 function updateFunction({ id, Title, Description }) {
-    return disaptch => {
+    return dispatch => {
         const todoObject = {
             Title,
             Description
@@ -81,21 +95,44 @@ function updateFunction({ id, Title, Description }) {
         })
             .then(res => res.json())
             .then(data => {
-                disaptch({
-                    type: 'DATA_UPDATED',
-                    payload: data
+                swal('Task updated!', 'Your todo has beed updated', 'success');
+                fetch(`https://nodejs-todo-server.herokuapp.com/todo/api/v1.0/tasks/`, {
+                    method: 'GET'
                 })
-            })
+                    .then(res => res.json())
+                    .then(data => {
+                        dispatch({
+                            type: 'ALL_TODOS',
+                            payload: data
+                        })
+                    });
+            }
+            )
     }
 };
 
 function markAsDone(id, status) {
+    console.log(id, status);
     return dispatch => {
         fetch(`https://nodejs-todo-server.herokuapp.com/todo/api/v1.0/tasks/${id}/${status}`, {
             method: "PUT"
         })
             .then(res => res.json())
-            .then(data => console.log(data));
+            .then(data => {
+                console.log(data);
+                swal('Task status Updated!', 'Your todo has beed updated', 'success');
+
+                fetch(`https://nodejs-todo-server.herokuapp.com/todo/api/v1.0/tasks/`, {
+                    method: 'GET'
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        dispatch({
+                            type: 'ALL_TODOS',
+                            payload: data
+                        })
+                    });
+            });
     }
 }
 
