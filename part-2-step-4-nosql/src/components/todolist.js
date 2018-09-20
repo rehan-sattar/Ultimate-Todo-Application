@@ -39,10 +39,9 @@ class TodoList extends Component {
     }
 
     componentWillReceiveProps(props) {
-        console.log('component will Recieve props')
         this.setState({
             todos: props.todos
-        })
+        });
     }
     // ****** modal's controllers *******
     onOpenModal(id) {
@@ -57,6 +56,10 @@ class TodoList extends Component {
     addTodoHandler(e) {
         e.preventDefault();
         this.props.addThisTodo(this.state);
+        this.setState({
+            title: '',
+            description: '',
+        });
     };
 
     removeTodoHandler(id) {
@@ -74,9 +77,11 @@ class TodoList extends Component {
             Description: this.state.updatedDescription
         };
         this.props.updateThisTodo(updatedObject);
+        this.onCloseModal();
     }
 
     markAsDoneHandler(id, status) {
+        console.log(id);
         this.props._markAsDone(id, status)
     }
 
@@ -174,9 +179,11 @@ class TodoList extends Component {
 
 }
 
-const mapStateToProps = (state) => ({
-    todos: state.todos
-});
+const mapStateToProps = (state) => {
+    return {
+        todos: state.todos
+    }
+}
 
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
