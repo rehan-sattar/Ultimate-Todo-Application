@@ -10,14 +10,23 @@ npm install
 
 ### Run Server
 ```
-node server.js
+node src/server.js
+
+
 ```
 ### Run Client
 ```
-node client.js list
-node client.js insert 11 "Ultimate Todo Part 4" "writing code and developing part 4 of ultimate todo App"
-node client.js get 11
-node client.js delete 11
+node app.js
+
+```
+### Run Test
+```
+node grpcclienttest.js list
+node grpcclienttest.js insert 11 "Ultimate Todo Part 4" "writing code  part 4 of ultimate todo App"
+node grpcclienttest.js update 11 "Ultimate Todo Part 5" "writing code and developing part 4 of ultimate todo App"
+node grpcclienttest.js get 11
+node grpcclienttest.js delete 11
+
 ```
 
 #### Progress

@@ -32,6 +32,8 @@ var assert = {
 
 };
 
+
+// try to get one todo
 try {
     assert.get(parseInt(40),(error, todo)=>{
         console.log(todo);
@@ -41,6 +43,8 @@ try {
     console.log(error.message);
 }
 
+
+// try to delete todo
 try {
     assert.delete(40,(error, todo)=>{
         console.log(todo);
