@@ -81,6 +81,7 @@ server.addService(todoproto.TodoService.service, {
                 id: call.request.id,
             },
             update: {
+                id: call.request.id,
                 title: call.request.title,
                 description: call.request.description,
             }
