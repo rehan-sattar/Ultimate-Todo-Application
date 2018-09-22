@@ -20,10 +20,11 @@ message Todo {
   int32 id = 1;
   string title = 2;
   string description = 3;
+  bool done = 4;
 }
 
 message TodoList {
-  repeated Todo todo = 1;
+  repeated Todo todos = 1;
 }
 
 message TodoId {
