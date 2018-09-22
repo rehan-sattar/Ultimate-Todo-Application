@@ -1,0 +1,28 @@
+{
+  "name": "grpc-sql",
+  "version": "0.1.0",
+  "description": "grpc part 1 step 3 using sql",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Rehan-Sattar/Ultimate-Todo-Application/tree/master/grpc-p1-s3/sql"
+  },
+  "keywords": [
+    "node",
+    "grpc",
+    "sql",
+    "todo"
+  ],
+  "author": "zaynkorai",
+  "license": "MIT",
+  "dependencies": {
+    "@grpc/proto-loader": "^0.3.0",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "grpc": "^1.15.1",
+    "pg": "^7.4.3"
+  }
+}

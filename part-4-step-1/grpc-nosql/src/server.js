@@ -26,20 +26,10 @@ const TodoDb = require('./tododb');
 server.addService(todoproto.TodoService.service, {
 
     list: function (_, callback) {
-
-        TodoDb.list((error, todoList) => {
-            if (error) {
-                callback(error);
-            } else {
-                // Wrap the list in an object to match TodoList message structure
-                callback(null, { todos: todoList });
-            }
-        })
+        TodoDb.list(callback);
         // static code works without database
         // callback(null, todos);
     },
-
-
 
     get: function (call, callback) {
         var payload = {

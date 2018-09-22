@@ -28,17 +28,6 @@ node grpcclienttest.js get 1
 node grpcclienttest.js delete 1
 
 ```
-### API 
-
-API Crud operation  app.js: 
-
-| endpoint | HTTP | Description |
-| ------------- | ------ | ------------- |
-| /todo/api/v1.0/tasks     | GET | GET all todos |
-| /todo/api/v1.0/tasks/:id | GET | GET one todo |
-| /todo/api/v1.0/tasks/add | POST | Add new todo |
-| /todo/api/v1.0/tasks/edit/:id | PUT | Edit existing todo |
-| /todo/api/v1.0/tasks/delete/:id | DELETE | Delete existing todo |
 
 #### Progress
 - [x] gRPC

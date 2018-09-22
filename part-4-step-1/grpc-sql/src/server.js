@@ -28,7 +28,7 @@ server.addService(todoproto.TodoService.service, {
 
         db.query(`SELECT * FROM Todos`, (err, res) => {
             if (err) throw err;
-            callback(null, { todos: res.rows })
+            callback(null, res)
         })
     },
 
@@ -40,7 +40,7 @@ server.addService(todoproto.TodoService.service, {
     },
 
     get: function (call, callback) {
-        db.query('SELECT * FROM Todos WHERE id = $1', [call.request.id], (err, res) => {
+        db.query('SELECT * FROM Todos WHERE id = $1',[call.request.id], (err, res) => {
             if (err) throw err;
             callback(null, res.rows[0])
         })
