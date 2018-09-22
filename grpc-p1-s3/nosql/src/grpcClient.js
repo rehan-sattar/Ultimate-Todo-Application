@@ -20,11 +20,13 @@ function todosList(req, res) {
 
 function insertTodo(req, res) {
     var todo = {
+        id: parseInt(Math.random()),
         title: req.body.title,
         description: req.body.description
     };
-    client.insert(todo, function (error, empty) {
-        res.send(empty)
+    client.insert(todo, function (err, empty) {
+        if (err) throw err;
+        res.send({ status: success })
     });
 }
 
@@ -43,13 +45,15 @@ function updateTodo(req, res) {
         description: req.body.description
     };
     client.update(todo, function (err, empty) {
-        res.send(empty)
+        if (err) throw err;
+        res.send({ status: success })
     });
 }
 
 function deleteTodo(req, res) {
     client.delete({ id: parseInt(req.params.id) }, function (err, todo) {
-        res.send(todo)
+        if (err) throw err;
+        res.send({ status: success })
     });
 }
 

@@ -8,7 +8,7 @@ var todoproto = grpc.loadPackageDefinition(packageDefinition).todoproto;
 const server = new grpc.Server();
 
 global.Mongoose = require('mongoose');
-var mongoDB = 'mongodb://localhost/todo';
+var mongoDB = 'mongodb://teamdelta:teamdelta123@ds025429.mlab.com:25429/ultimate-todo';
 Mongoose.Promise = global.Promise;
 Mongoose.connect(mongoDB, { useNewUrlParser: true })
     .then(() => console.log('Mongodb connection succesful'))
@@ -81,7 +81,6 @@ server.addService(todoproto.TodoService.service, {
                 id: call.request.id,
             },
             update: {
-                id: call.request.id,
                 title: call.request.title,
                 description: call.request.description,
             }
