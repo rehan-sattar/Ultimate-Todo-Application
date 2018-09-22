@@ -4,8 +4,8 @@
 
 #### This Repository has 8 Different parts
 
-| Part  | Name    | 
-|-------|--------|
+| Part  | Name    | Step-1 | Step-2 | Step-3 | Step-4 | Step-5 |
+|-------|--------| --------| --------| --------| --------| --------|
 |   1:  |Server  REST  API’s |
 |   2:  |Client  Apps |
 |   3:  | Realtime  App |
