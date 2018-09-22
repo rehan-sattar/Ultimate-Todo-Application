@@ -16,13 +16,9 @@
 |   8:  | Fargate  Server  API |
 
 #### Contributors
-[Adil Mohsin](https://github.com/adilmohsin) |
-[Adnan Hussain](https://github.com/Adnan-Hussain22) |
-[Ikram Khan](https://github.com/ikramkhan9) |
-[Kashan Adil](https://github.com/Syed-Kashan-Adil) |
-[Osama Imran](https://github.com/osamaimran25) |
-[Rehan Sattar](https://github.com/Rehan-Sattar) |
-[Zayn Korai](https://github.com/zaynkorai) |
+|![](https://avatars0.githubusercontent.com/u/16635386?s=400&v=4)|![](https://avatars2.githubusercontent.com/u/43226545?s=400&v=4)|![](https://avatars3.githubusercontent.com/u/17683453?s=400&v=4)|![](https://avatars2.githubusercontent.com/u/38387212?s=400&v=4)|![](https://avatars0.githubusercontent.com/u/36574363?s=400&v=4)|![](https://avatars0.githubusercontent.com/u/26999472?s=400&v=4)|![](https://avatars1.githubusercontent.com/u/15165448?s=400&v=4)|
+|-- |-- |-- | --| --|-- | --|
+ |[Adil Mohsin](https://github.com/adilmohsin) |[Adnan Hussain](https://github.com/Adnan-Hussain22) |[Ikram Khan](https://github.com/ikramkhan9) |[Kashan Adil](https://github.com/Syed-Kashan-Adil) |[Osama Imran](https://github.com/osamaimran25) |[Rehan Sattar](https://github.com/Rehan-Sattar) |[Zayn Korai](https://github.com/zaynkorai)|
 
 
 **License : MIT**
