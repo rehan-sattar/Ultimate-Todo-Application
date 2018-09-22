@@ -1,0 +1,31 @@
+syntax = "proto3"; //Using proto3 version.
+
+package todoproto; 
+
+// Service definition for a Todo.
+
+service TodoService {
+  rpc List (Empty) returns (TodoList){}
+  rpc Insert (Todo) returns (Empty){}
+  rpc Get (TodoId) returns (Todo){}
+  rpc Update (Todo) returns (Todo){}
+  rpc Delete (TodoId) returns (Empty){}
+}
+
+// Message Type definition for a Todo.
+
+message Empty {}
+
+message Todo {
+  int32 id = 1;
+  string title = 2;
+  string description = 3;
+}
+
+message TodoList {
+  repeated Todo todo = 1;
+}
+
+message TodoId {
+  int32 id = 1;
+}

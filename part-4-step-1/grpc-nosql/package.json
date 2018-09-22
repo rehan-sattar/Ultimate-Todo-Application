@@ -1,0 +1,27 @@
+{
+  "name": "grpc-nosql",
+  "version": "0.1.0",
+  "description": "grpc part 1 step 3 using nosql(mongodb)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Rehan-Sattar/Ultimate-Todo-Application/tree/master/grpc-p1-s3/nosql"
+  },
+  "keywords": [
+    "node",
+    "grpc",
+    "mongodb",
+    "todo"
+  ],
+  "author": "zaynkorai",
+  "license": "MIT",
+  "dependencies": {
+    "@grpc/proto-loader": "^0.3.0",
+    "bluebird": "^3.5.2",
+    "grpc": "^1.15.1",
+    "mongoose": "^5.2.14"
+  }
+}
