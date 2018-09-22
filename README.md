@@ -12,7 +12,7 @@
 |   4:  | Containerizing  the  App  |
 |   5:  | Serverless  REST  API |
 |   6:  | Cloud  Native  App  |
-|   7:  | Part  VII:  Advanced  Cloud  Native  App   | 
+|   7:  | Advanced  Cloud  Native  App   | 
 |   8:  | Fargate  Server  API |
 
 #### Contributors
