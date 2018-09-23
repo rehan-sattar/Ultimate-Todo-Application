@@ -11,7 +11,7 @@ const server = new grpc.Server();
 
 
 // Postgress
-const connectionString = 'postgresql://root:root@localhost:5432/todo'
+const connectionString = 'postgres://xyjvkyce:sVCMeL4qO5N9bp3NTU9qllxVOt_UdkPw@horton.elephantsql.com:5432/xyjvkyce'
 const db = new Client({
     connectionString: connectionString,
 })
