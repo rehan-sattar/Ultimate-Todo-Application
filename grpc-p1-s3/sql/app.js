@@ -17,13 +17,16 @@ var client = new todoproto.TodoService('0.0.0.0:50051', grpc.credentials.createI
 var express = require('express')
 var app = express()
 var bodyParser = require('body-parser')
-
+var cors = require('cors');
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
 
 // parse application/json
 app.use(bodyParser.json())
 
+
+// cors enabled
+app.use(cors());
 /* initiate router */
 var TodoRouter = require('./src/router/api')
 
