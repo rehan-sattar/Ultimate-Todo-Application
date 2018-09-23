@@ -10,9 +10,11 @@ class TodoController {
             status = true;
         else if (req.params.status === "false")
             status = false;
-        ToDo.findOneAndUpdate(req.params.id, { Done: status }).then(data => {
-            ToDo.find({ _id: data._id }).then(realData => {
-                res.status(200).send(realData[0]);
+        console.log(req.params.id);
+        ToDo.findByIdAndUpdate(req.params.id, { $set: { Done: status } }, { new: true }).then(data => {
+            console.log(data);
+            ToDo.findById({ _id: data._id }).then(realData => {
+                res.status(200).send(realData);
             });
         });
     }
@@ -35,9 +37,9 @@ class TodoController {
     }
     UpdateTask(req, res) {
         const task_id = req.params.id;
-        ToDo.findOneAndUpdate(task_id, req.body).then(data => {
-            ToDo.find({ _id: data._id }).then(realData => {
-                res.status(200).send(realData[0]);
+        ToDo.findByIdAndUpdate(task_id, { $set: req.body }).then(data => {
+            ToDo.findById({ _id: data._id }).then(realData => {
+                res.status(200).send(realData);
             });
         });
     }

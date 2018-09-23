@@ -29,7 +29,7 @@ function addTodos({ title, description }) {
         })
             .then(res => res.json())
             .then(data => {
-                if (data.status == true) {
+                if (data.status === true) {
                     swal('Task Added!', 'Your todo has beed added', 'success');
                     fetch(`https://nodejs-todo-server.herokuapp.com/todo/api/v1.0/tasks/`, {
                         method: 'GET'
@@ -112,8 +112,8 @@ function updateFunction({ id, Title, Description }) {
 };
 
 function markAsDone(id, status) {
-    console.log(id, status);
-    return dispatch => {
+     return dispatch => {
+        console.log(id, status);
         fetch(`https://nodejs-todo-server.herokuapp.com/todo/api/v1.0/tasks/${id}/${status}`, {
             method: "PUT"
         })
@@ -127,13 +127,14 @@ function markAsDone(id, status) {
                 })
                     .then(res => res.json())
                     .then(data => {
+                        console.log(data);
                         dispatch({
                             type: 'ALL_TODOS',
                             payload: data
                         })
                     });
             });
-    }
+     }
 }
 
 
