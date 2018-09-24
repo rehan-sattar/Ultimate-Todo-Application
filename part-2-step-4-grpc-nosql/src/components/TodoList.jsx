@@ -23,6 +23,7 @@ class TodoList extends Component {
         this.handleTaskdone = this.handleTaskdone.bind(this);
         this.handleDeleteRequest = this.handleDeleteRequest.bind(this);
         this.handleUpdateRequest = this.handleUpdateRequest.bind(this);
+        this.onCloseModal = this.onCloseModal.bind(this);
     };
 
     onOpenModal = (id) => {
@@ -59,6 +60,7 @@ class TodoList extends Component {
             updateDoneStatus,
             todoId: localStorage.getItem('updatedTodoId')
         });
+        this.onCloseModal();
     }
 
     handleTaskdone(todo) {
@@ -75,11 +77,11 @@ class TodoList extends Component {
                                 <div key={index} className="card my-3">
                                     <div className="card-body">
                                         <h5>id: {index + 1}</h5>
-                                        <hr/>
+                                        <hr />
                                         <h5>Title: {todo.title}</h5>
-                                        <hr/>
+                                        <hr />
                                         <h5>Description: {todo.description}</h5>
-                                        <hr/>
+                                        <hr />
                                         <h5>Status: {todo.doneStatus === true ? <span> Task completed! </span> : (<button onClick={() => this.handleTaskdone(todo)}>Done</button>)} </h5>
                                     </div>
                                     <div className="card-footer">

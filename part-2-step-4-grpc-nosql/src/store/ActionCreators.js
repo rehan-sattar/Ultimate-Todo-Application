@@ -1,6 +1,6 @@
 
 import { Actions } from "./Actions";
-import store from "./index";
+import swal from "sweetalert";
 const API_END_POINT = 'http://localhost:2000';
 function insertTodoToDatabase(todoState) {
     return dispatch => {
@@ -18,8 +18,17 @@ function insertTodoToDatabase(todoState) {
             .then(res => res.json())
             .then(data => {
                 if (data.status) {
-                    //    () =>  getAllTodosFromDatabase();
-                    // read all from database!
+                    fetch(`${API_END_POINT}/todo/api/v1.0/tasks`)
+                        .then(res => res.json())
+                        .then(data => {
+
+                            swal('Todo added', "Todo has been added!", 'success');
+                            dispatch({
+                                type: Actions.readAllTodoSuccess,
+                                payload: data
+                            })
+                        })
+                        .catch(err => console.log(err))
                 }
             })
             .catch(err => console.log(err))
@@ -36,7 +45,20 @@ function deleterTodoFromDatabase(todoId) {
 
         })
             .then(res => res.json())
-            .then(data => console.log(data))
+            .then(data => {
+                fetch(`${API_END_POINT}/todo/api/v1.0/tasks`)
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log(data)
+
+                        swal('Todo Deleted', "Todo has been Deleted!", 'success');
+                        dispatch({
+                            type: Actions.readAllTodoSuccess,
+                            payload: data
+                        })
+                    })
+                    .catch(err => console.log(err))
+            })
             .catch(err => console.log(err))
     }
 };
@@ -59,7 +81,19 @@ function updateTodoInDatabase({ updateDescription,
 
         })
             .then(res => res.json())
-            .then(data => console.log(data))
+            .then(data => {
+                fetch(`${API_END_POINT}/todo/api/v1.0/tasks`)
+                    .then(res => res.json())
+                    .then(data => {
+                        
+                        swal('Todo updated', "Todo has been updated!", 'success');
+                        dispatch({
+                            type: Actions.readAllTodoSuccess,
+                            payload: data
+                        })
+                    })
+                    .catch(err => console.log(err))
+            })
             .catch(err => console.log(err))
     }
 };
