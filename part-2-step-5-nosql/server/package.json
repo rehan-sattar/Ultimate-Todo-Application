@@ -1,0 +1,21 @@
+{
+  "name": "apis-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "ts-node ./lib/server.ts",
+    "start": "nodemon ./dist/server.js",
+    "prod": "npm run build && npm run start"
+  },
+  "author": "syed_kashan-adil",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "method-override": "^3.0.0",
+    "mongoose": "^5.2.15",
+    "morgan": "^1.9.1"
+  }
+}
