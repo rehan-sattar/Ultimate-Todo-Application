@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ToDo App</title>
+    <link rel="icon" href="static/images/delta.png" >
+    {% extends 'bootstrap/base.html' %}
+</head>
+
+<body>
+  {% block content %}
+
+
+<div class="container"><div class="well">
+       
+        <img src="static/images/team2.png" height="50" width="95"><img src="static/images/delta.png" height="50" width="50">
+    <div class="text-center">
+        
+        <h1 style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande'"><b>ToDo App</b></h1></div></div>
+        <div class="text-center">
+        <div class="well">
+        <form action="/add" method="POST">
+            <input type='text' name="todolist" placeholder="Click here to add" >
+            <input type="submit" value="ADD TASK" class="btn btn-success">
+        </form><br>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-success alert-dismissable" role="alert">
+            <button type="button" class="close" data-dismiss='alert' aria-label="close">
+                <span aria-hidden="true">X</span>
+                
+            </button>
+           {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        <br>
+        <table class="table table-striped">
+            <tr style="color: maroon">
+                <td><h2>Id No.</h2></td>
+                <td><h2>Title</h2></td>
+                <td><h2>Action</h2></td>
+            </tr>
+            {% for todo in todos %}<tr>
+                <td><b>{{ todo.id }}</b></td>
+                <td><b> {{ todo.text.title() }}</b></td>
+                <td> <a href="{{ url_for('update', id=todo.id )}}" class="btn btn-warning btn-xs">Update</a>
+
+                    <a  href="{{ url_for('delete', id=todo.id) }}" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure')">
+                    Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        <a class="pull-right" href="{{ url_for('reset', complete=False) }}"><button class="btn btn-primary"
+            onclick="confirm('Do you really want to RESET')">RESET</button></a>
+        </div>
+</div>
+    <div class="well"><b>
+        Made by Adil Mohsin <a href="github.com/adilmohsin" target="_blank"><span class="pull-right">Github</span></a></b>
+    </div>
+</div>
+
+{% endblock %}
+</body>
+</html>
