@@ -18,51 +18,67 @@ db.create_all()
 def index():
     return '<h1>ToDo Api</h1>'
 
-@app.route('/todo/api/v1.0/tasks', methods=['GET'])
+@app.route('/todo/api/v1.0/tasks')
 def show_tasks():
     tasks = todoApi.query.all()
-    view=[]
-    for task in tasks:
-        task_list={}
-        task_list['id']=task.id
-        task_list['title']=task.title
-        task_list['done'] = task.done
-        view.append(task_list)
-    return jsonify({'task':view})
+    if tasks:
+        view=[]
+        for task in tasks:
+            task_list={}
+            task_list['id']=task.id
+            task_list['title']=task.title
+            task_list['done'] = task.done
+            view.append(task_list)
+        return jsonify({'task':view})
+    else:
+        return jsonify({'results': 'no tasks found'})
 
+@app.route('/todo/api/v1.0/tasks/<int:id>')
+def show_single_id(id):
+    task=todoApi.query.filter_by(id=int(id)).first()
+    if task:
+        taskItem={}
+        taskItem['id']=task.id
+        taskItem['title']=task.title
+        taskItem['done']=task.done
+        return jsonify(taskItem)
+    else:
+        return jsonify({'prompt':'No Task Found'})
 
 @app.route('/todo/api/v1.0/tasks/add', methods=['POST'])
 def add():
-    add = request.get_json()
-    newTask=todoApi(title=add['title'],
-                    done=True)
-    db.session.add(newTask)
+    add=request.get_json()
+    task= todoApi(title=add['title'], done=True)
+    db.session.add(task)
     db.session.commit()
-    return('Task added successfully')
-    return jsonify({'prompt':'Added'})
+    return jsonify({'prompt':'Task added'})
 
 
 @app.route('/todo/api/v1.0/tasks/delete/<int:id>', methods=['DELETE'])
 def delete(id):
-    views=todoApi.query.filter_by(id=id).first()
-    db.session.delete(views)
-    db.session.commit()
-    return jsonify({'task':'deleted'})
-    return ('Task Removed Successfully')
+    task=todoApi.query.filter_by(id=int(id)).first()
+    if task:
+        db.session.delete(task)
+        db.session.commit()
+        return jsonify({'prompt':'Task Deleted'})
+    else:
+        return jsonify({'prompt':'No Task Found'})
 
 @app.route('/todo/api/v1.0/tasks/update/<id>', methods=['PUT'])
 def update(id):
     task=todoApi.query.filter_by(id=id).first()
     if not task:
-        return 'No task found'
+        return jsonify({'prompt':'No task Found'})
     else:
-        update=request.get_json()
+        update2=request.get_json()
+        task.done=True
+        task.title=update2['title']
 
         updateTask={'id':task.id}
-        updateTask['title']=update['title']
-        updateTask['done']=True
+        updateTask['title']=task.title
+        updateTask['done']=task.done
         db.session.commit()
-        return "Task Updated Successfully"
+        return jsonify({'prompt':'Task Updated'})
 
 app.run(debug=True)
 
