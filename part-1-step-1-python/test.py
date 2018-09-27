@@ -18,7 +18,7 @@ class TestApi(unittest.TestCase):
 
 
 
-    def test_create_post(self):
+    def test_create_task(self):
         task = {"id":1,"name":"coding","done":"no","priority":"high","desc":"coding and coding"}
         response = self.app.post(url, data=json.dumps(task),content_type='application/json')
         self.assertEqual(response.status_code, 200)
@@ -87,7 +87,7 @@ class TestApi(unittest.TestCase):
         response = self.app.get(url + '/1')
         self.assertEqual(response.status_code, 200)
         data1 = json.loads(response.get_data())
-        self.assertEqual(data1["results"][0]["name"], "update")
+        self.assertEqual(data1["results"][0]["name"], "coding")
 
         response = self.app.get(url + '/1')
         self.assertEqual(response.status_code, 200)
@@ -112,11 +112,31 @@ class TestApi(unittest.TestCase):
         response = self.app.delete(bad_url+'/completed')
         self.assertEqual(response.status_code, 404)
 
+    def test_inompleted(self):
+        response = self.app.get(url+'/uncompleted')
+        data = json.loads(response.get_data())
+        self.assertEqual(data["incomplete Task"][0]["done"],"no")
+
+        response = self.app.put(url+'/uncompleted')
+        self.assertEqual(response.status_code,405)
+
+        response = self.app.post(url + '/uncompleted')
+        self.assertEqual(response.status_code, 405)
+
+        response = self.app.delete(url+'/uncompleted')
+        self.assertEqual(response.status_code, 405)
+
+
+        response = self.app.delete(bad_url+'/uncompleted')
+        self.assertEqual(response.status_code, 404)
+
+
+
 
 
     def test_update(self):
         task={"desc": "coding and coding","done": "no","name": "update","priority": "low"}
-        response = self.app.put(url+'/2',data=json.dumps(task),content_type='application/json')
+        response = self.app.put(url+'/8',data=json.dumps(task),content_type='application/json')
         data1 = json.loads(response.get_data())
         self.assertEqual(data1["result"],  "success")
         self.assertEqual(response.status_code, 200)
@@ -129,24 +149,21 @@ class TestApi(unittest.TestCase):
         response = self.app.put(bad_url + '/222', data=json.dumps(task), content_type='application/json')
         self.assertEqual(response.status_code, 404)
 
+    def test_delete(self):
 
+        response = self.app.delete(url +'/2')
+        data=json.loads(response.get_data())
+        self.assertEqual(data["result"],"record deleted")
+        self.assertEqual(response.status_code, 200)
 
+        response = self.app.delete(url+'/222')
+        data1 = json.loads(response.get_data())
+        self.assertEqual(data1["result"], "No record deleted")
+        self.assertEqual(response.status_code, 200)
 
-    # def test_update(self):
-    #     u_task={"desc": "coding and coding","done": "yes","name": "codingAND","priority": "high"}
-    #     response = self.app.put(bad_url+'/5',data=json.dumps(u_task),content_type='application/json')
-    #     self.assertEqual(response.status_code, 404)
-    #
-    #
-    #     response = self.app.put(url + '/5', data=json.dumps(u_task), content_type='application/json')
-    #     self.assertEqual(response.status_code, 200)
-    #     data = json.loads(response.get_data())
-    #     self.assertEqual(data['result'],"success" )
-    #
-    #     response = self.app.put(url + '/45', data=json.dumps(u_task), content_type='application/json')
-    #     self.assertEqual(response.status_code, 200)
-    #     data = json.loads(response.get_data())
-    #     self.assertEqual(data['result'], "failed")
+        response = self.app.delete(bad_url+'/222')
+        self.assertEqual(response.status_code, 404)
+
 
 
 if __name__ == "__main__":
