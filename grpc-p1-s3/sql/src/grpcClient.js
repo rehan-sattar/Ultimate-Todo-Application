@@ -43,6 +43,18 @@ function updateTodo(req, res) {
     });
 }
 
+function updateStatus(req, res) {
+    var todo = {
+        id: parseInt(req.params.id),
+        done: req.body.done,
+    };
+    client.status(todo, function (err, empty) {
+        if (err) throw err;
+        res.send(true)
+    });
+}
+
+
 function deleteTodo(req, res) {
     client.delete({ id: parseInt(req.params.id) }, function (err, todo) {
         res.send(todo)
@@ -56,5 +68,6 @@ module.exports = {
     insertTodo,
     getTodo,
     updateTodo,
+    updateStatus,
     deleteTodo
 }

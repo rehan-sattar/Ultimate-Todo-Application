@@ -1,5 +1,5 @@
 const pg = require('pg');
-var connectionString = process.env.DATABASE_URL || "postgres://root:root@localhost:5432/Todo";
+var connectionString = process.env.DATABASE_URL || "postgres://xyjvkyce:sVCMeL4qO5N9bp3NTU9qllxVOt_UdkPw@horton.elephantsql.com:5432/xyjvkyce";
 
 const client = new pg.Client(connectionString);
 client.connect();

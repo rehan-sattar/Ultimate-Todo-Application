@@ -12,7 +12,7 @@ const server = new grpc.Server();
 
 // Postgress
 const connectionString = 'postgres://xyjvkyce:sVCMeL4qO5N9bp3NTU9qllxVOt_UdkPw@horton.elephantsql.com:5432/xyjvkyce'
-const db = new Client({  
+const db = new Client({
     connectionString: connectionString,
 })
 db.connect((err) => {
@@ -48,6 +48,13 @@ server.addService(todoproto.TodoService.service, {
 
     update: function (call, callback) {
         db.query('UPDATE Todos SET title = $1, description =$2  WHERE id = $3', [call.request.title, call.request.description, call.request.id], (err) => {
+            if (err) throw err;
+            callback(null, { status: "success" })
+        })
+    },
+
+    status: function (call, callback) {
+        db.query('UPDATE Todos SET active = $1 WHERE id = $2', [call.request.done, call.request.id], (err) => {
             if (err) throw err;
             callback(null, { status: "success" })
         })
