@@ -3,10 +3,10 @@ import * as pg from "pg";
 const uuid = require("uuid");
 
 const config = {
-  host: "localhost",//ec2-184-73-197-211.compute-1.amazonaws.com
-  user: "postgres", //ycofgzasirhggj
-  password: "scriptkiddies",//2000701ba901b6d74731a32bafe98a1cc979a8fe9930ba60c326e18669a24bab
-  database: "Ultimate Todo Application"//d4t8u6uontg6u2
+  host: "ec2-184-73-197-211.compute-1.amazonaws.com",
+  user: "ycofgzasirhggj",
+  password: "2000701ba901b6d74731a32bafe98a1cc979a8fe9930ba60c326e18669a24bab",
+  database: "d4t8u6uontg6u2"
 };
 
 class TodoController {

@@ -11,10 +11,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const pg = require("pg");
 const uuid = require("uuid");
 const config = {
-    host: "localhost",
-    user: "postgres",
-    password: "scriptkiddies",
-    database: "Ultimate Todo Application" //d4t8u6uontg6u2
+    host: "ec2-184-73-197-211.compute-1.amazonaws.com",
+    user: "ycofgzasirhggj",
+    password: "2000701ba901b6d74731a32bafe98a1cc979a8fe9930ba60c326e18669a24bab",
+    database: "d4t8u6uontg6u2"
 };
 class TodoController {
     AddNewTodo(req, res) {
