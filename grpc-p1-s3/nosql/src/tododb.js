@@ -20,6 +20,12 @@ var Todo = class {
 		todoModel.updateOne(condition, {$set:update}, callback)
 	}
 
+	status(callback) {
+		const condition = this.payload.condition;
+		const update = this.payload.update;
+		todoModel.updateOne(condition, {$set:update}, callback)
+	}
+
 	get(callback) {
 		const condition = this.payload.condition;
 		todoModel.findOne(condition, { _id: 0, __v: 0 }, { lean: true }, callback)

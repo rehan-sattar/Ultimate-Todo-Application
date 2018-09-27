@@ -10,6 +10,7 @@ service TodoService {
   rpc Get (TodoId) returns (Todo){}
   rpc Update (Todo) returns (Todo){}
   rpc Delete (TodoId) returns (Empty){}
+  rpc Status (Done) returns (Done){}
 }
 
 // Message Type definition for a Todo.
@@ -29,4 +30,9 @@ message TodoList {
 
 message TodoId {
   int32 id = 1;
+}
+
+message Done {
+  int32 id = 1;
+  bool done = 2;
 }

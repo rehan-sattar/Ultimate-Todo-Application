@@ -95,6 +95,20 @@ server.addService(todoproto.TodoService.service, {
         // callback(null, {});
     },
 
+    status: function (call, callback) {
+        var payload = {
+            condition: {
+                id: call.request.id,
+            },
+            update: {
+                id: call.request.id,
+                done: call.request.done,
+            }
+        };
+        var t = new TodoDb(payload);
+        t.status(callback);
+    },
+
     delete: function (call, callback) {
         var payload = {
             condition: {
