@@ -20,12 +20,16 @@ class TodoController {
     AddNewTodo(req, res) {
         const client = new pg.Client(config);
         client.connect();
-        const data = req.body;
+        const { title, description } = req.body;
+        if (!(title && description)) {
+            res.status(500).send([{ message: "Parameters missing", status: false }]);
+            return;
+        }
         (function hit() {
             return __awaiter(this, void 0, void 0, function* () {
                 try {
                     const response = yield client.query(`INSERT INTO TODO(ID,TITLE,DESCRIPTION)
-          VALUES($1,$2,$3)`, [uuid(), data.title, data.description]);
+          VALUES($1,$2,$3)`, [uuid(), title, description]);
                     client.end();
                     const resSend = response.rowCount
                         ? { message: "Todo added successfully", status: true }
@@ -82,19 +86,42 @@ class TodoController {
         client.connect();
         const { done } = req.body;
         const { id } = req.params;
+        if (!done) {
+            res
+                .status(500)
+                .send([{ message: "Parameter done missing", status: false }]);
+            return;
+        }
         (function hit() {
             return __awaiter(this, void 0, void 0, function* () {
                 try {
                     const response = yield client.query(`UPDATE TODO 
         SET DONE = $1
         WHERE ID = $2`, [done, id]);
+                    res.send(response);
+                    let response2;
+                    if (response.rowCount) {
+                        response2 = yield client.query(`SELECT * FROM TODO WHERE ID = $1`, [
+                            id
+                        ]);
+                        client.end();
+                        res.status(200).send(response2.rows.concat([
+                            done
+                                ? {
+                                    message: "Todo added to done list successfully",
+                                    status: true
+                                }
+                                : {
+                                    message: "Todo added to undone list successfully",
+                                    status: true
+                                }
+                        ]));
+                        return;
+                    }
+                    res
+                        .status(200)
+                        .send([null, { message: "Unable update a todo", status: false }]);
                     client.end();
-                    const resSend = response.rowCount
-                        ? (done
-                            ? { message: "Todo added to done list successfully", status: true }
-                            : { message: "Todo added to undone list successfully", status: true })
-                        : { message: "Unable update a todo", status: false };
-                    res.status(200).send([resSend]);
                 }
                 catch (err) {
                     res
@@ -109,17 +136,30 @@ class TodoController {
         client.connect();
         const { id } = req.params;
         const { title, description } = req.body;
+        if (!(title && description)) {
+            res.status(500).send([{ message: "Parameters missing", status: false }]);
+            return;
+        }
         (function hit() {
             return __awaiter(this, void 0, void 0, function* () {
                 try {
                     const response = yield client.query(`UPDATE TODO 
         SET TITLE = $1, DESCRIPTION = $2
         WHERE ID = $3`, [title, description, id]);
+                    if (response.rowCount) {
+                        let response2 = yield client.query("SELECT * FROM TODO WHERE ID = $1", [id]);
+                        res.status(200).send(response2.rows.concat([
+                            {
+                                message: "Todo updated successfully",
+                                status: true
+                            }
+                        ]));
+                        return;
+                    }
+                    res
+                        .status(200)
+                        .send([null, { message: "Unable update a todo", status: false }]);
                     client.end();
-                    const resSend = response.rowCount
-                        ? { message: "Todo updated successfully", status: true }
-                        : { message: "Unable update a todo", status: false };
-                    res.status(200).send([resSend]);
                 }
                 catch (err) {
                     res

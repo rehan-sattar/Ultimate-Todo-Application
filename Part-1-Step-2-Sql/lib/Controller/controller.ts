@@ -4,7 +4,7 @@ const uuid = require("uuid");
 
 const config = {
   host: "ec2-184-73-197-211.compute-1.amazonaws.com",
-  user: "ycofgzasirhggj",
+  user: "ycofgzasirhggj", 
   password: "2000701ba901b6d74731a32bafe98a1cc979a8fe9930ba60c326e18669a24bab",
   database: "d4t8u6uontg6u2"
 };
@@ -13,13 +13,17 @@ class TodoController {
   public AddNewTodo(req: Request, res: Response) {
     const client = new pg.Client(config);
     client.connect();
-    const data = req.body;
+    const { title, description } = req.body;
+    if (!(title && description)) {
+      res.status(500).send([{ message: "Parameters missing", status: false }]);
+      return;
+    }
     (async function hit() {
       try {
         const response = await client.query(
           `INSERT INTO TODO(ID,TITLE,DESCRIPTION)
           VALUES($1,$2,$3)`,
-          [uuid(), data.title, data.description]
+          [uuid(), title, description]
         );
         client.end();
         const resSend = response.rowCount
@@ -74,6 +78,12 @@ class TodoController {
     client.connect();
     const { done } = req.body;
     const { id } = req.params;
+    if (!done) {
+      res
+        .status(500)
+        .send([{ message: "Parameter done missing", status: false }]);
+      return;
+    }
     (async function hit() {
       try {
         const response = await client.query(
@@ -82,15 +92,32 @@ class TodoController {
         WHERE ID = $2`,
           [done, id]
         );
+        res.send(response);
+        let response2;
+        if (response.rowCount) {
+          response2 = await client.query(`SELECT * FROM TODO WHERE ID = $1`, [
+            id
+          ]);
+          client.end();
+          res.status(200).send(
+            response2.rows.concat([
+              done
+                ? {
+                    message: "Todo added to done list successfully",
+                    status: true
+                  }
+                : {
+                    message: "Todo added to undone list successfully",
+                    status: true
+                  }
+            ])
+          );
+          return;
+        }
+        res
+          .status(200)
+          .send([null, { message: "Unable update a todo", status: false }]);
         client.end();
-        const resSend = response.rowCount
-          ? (
-            done
-            ? { message: "Todo added to done list successfully", status: true }
-            : { message: "Todo added to undone list successfully", status: true }
-            )
-          : { message: "Unable update a todo", status: false };
-        res.status(200).send([resSend]);
       } catch (err) {
         res
           .status(500)
@@ -104,6 +131,10 @@ class TodoController {
     client.connect();
     const { id } = req.params;
     const { title, description } = req.body;
+    if (!(title && description)) {
+      res.status(500).send([{ message: "Parameters missing", status: false }]);
+      return;
+    }
     (async function hit() {
       try {
         const response = await client.query(
@@ -112,11 +143,25 @@ class TodoController {
         WHERE ID = $3`,
           [title, description, id]
         );
+        if (response.rowCount) {
+          let response2 = await client.query(
+            "SELECT * FROM TODO WHERE ID = $1",
+            [id]
+          );
+          res.status(200).send(
+            response2.rows.concat([
+              {
+                message: "Todo updated successfully",
+                status: true
+              }
+            ])
+          );
+          return;
+        }
+        res
+          .status(200)
+          .send([null, { message: "Unable update a todo", status: false }]);
         client.end();
-        const resSend = response.rowCount
-          ? { message: "Todo updated successfully", status: true }
-          : { message: "Unable update a todo", status: false };
-        res.status(200).send([resSend]);
       } catch (err) {
         res
           .status(500)
