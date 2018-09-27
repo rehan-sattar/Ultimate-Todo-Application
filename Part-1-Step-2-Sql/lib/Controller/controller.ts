@@ -3,10 +3,10 @@ import * as pg from "pg";
 const uuid = require("uuid");
 
 const config = {
-  host: "ec2-184-73-197-211.compute-1.amazonaws.com",
-  user: "ycofgzasirhggj", 
-  password: "2000701ba901b6d74731a32bafe98a1cc979a8fe9930ba60c326e18669a24bab",
-  database: "d4t8u6uontg6u2"
+  host: "localhost",//ec2-184-73-197-211.compute-1.amazonaws.com
+  user: "postgres", //ycofgzasirhggj
+  password: "scriptkiddies",//2000701ba901b6d74731a32bafe98a1cc979a8fe9930ba60c326e18669a24bab
+  database: "Ultimate Todo Application"//d4t8u6uontg6u2
 };
 
 class TodoController {
@@ -16,6 +16,7 @@ class TodoController {
     const { title, description } = req.body;
     if (!(title && description)) {
       res.status(500).send([{ message: "Parameters missing", status: false }]);
+      client.end();
       return;
     }
     (async function hit() {
@@ -25,12 +26,13 @@ class TodoController {
           VALUES($1,$2,$3)`,
           [uuid(), title, description]
         );
-        client.end();
         const resSend = response.rowCount
           ? { message: "Todo added successfully", status: true }
           : { message: "Unable add a todo", status: false };
+          client.end();
         res.status(200).send([resSend]);
       } catch (err) {
+        client.end();
         res
           .status(500)
           .send([{ message: "Unable to add new todo", status: false }, err]);
@@ -47,6 +49,7 @@ class TodoController {
         client.end();
         res.status(200).send(response.rows);
       } catch (err) {
+        client.end();
         res
           .status(500)
           .send([{ message: "Server Error!", status: false }, err]);
@@ -66,6 +69,7 @@ class TodoController {
         client.end();
         res.status(200).send(response.rows);
       } catch (err) {
+        client.end();
         res
           .status(500)
           .send([{ message: "Server Error!", status: false }, err]);
@@ -79,6 +83,7 @@ class TodoController {
     const { done } = req.body;
     const { id } = req.params;
     if (!done) {
+      client.end();
       res
         .status(500)
         .send([{ message: "Parameter done missing", status: false }]);
@@ -92,10 +97,8 @@ class TodoController {
         WHERE ID = $2`,
           [done, id]
         );
-        res.send(response);
-        let response2;
         if (response.rowCount) {
-          response2 = await client.query(`SELECT * FROM TODO WHERE ID = $1`, [
+          let response2 = await client.query(`SELECT * FROM TODO WHERE ID = $1`, [
             id
           ]);
           client.end();
@@ -114,6 +117,7 @@ class TodoController {
           );
           return;
         }
+        client.end();
         res
           .status(200)
           .send([null, { message: "Unable update a todo", status: false }]);
@@ -132,6 +136,7 @@ class TodoController {
     const { id } = req.params;
     const { title, description } = req.body;
     if (!(title && description)) {
+      client.end();
       res.status(500).send([{ message: "Parameters missing", status: false }]);
       return;
     }
@@ -148,6 +153,7 @@ class TodoController {
             "SELECT * FROM TODO WHERE ID = $1",
             [id]
           );
+          client.end();
           res.status(200).send(
             response2.rows.concat([
               {
@@ -158,11 +164,12 @@ class TodoController {
           );
           return;
         }
+        client.end();
         res
           .status(200)
           .send([null, { message: "Unable update a todo", status: false }]);
-        client.end();
       } catch (err) {
+        client.end();
         res
           .status(500)
           .send([{ message: "Unable to update", status: false }, err]);
@@ -187,6 +194,7 @@ class TodoController {
           : { message: "Unable deleted a todo", status: false };
         res.status(200).send([resSend]);
       } catch (err) {
+        client.end();
         res
           .status(500)
           .send([{ message: "Unable to delete", status: false }, err]);
