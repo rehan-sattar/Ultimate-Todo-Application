@@ -164,6 +164,22 @@ describe("Api Post test  10", () => {
 });
 
 describe("Api Post test  11", () => {
+  it("should returns an array of object and propert message with value Parameters missing", done => {
+    chai
+      .request("https://ultimate-todo-web-postgres.herokuapp.com")
+      .post("/todo/api/v1.0/todos")
+      .send({})
+      .end((err, res) => {
+        res.body[0].should.have
+          .property("message")
+          .eql("Parameters missing");
+        // Means enable to add a todo defined by the developer
+        done();
+      });
+  });
+});
+
+describe("Api Post test  12", () => {
   it("should returns server error 404 since api url is not correct", done => {
     chai
       .request("https://ultimate-todo-web-postgres.herokuapp.com")
