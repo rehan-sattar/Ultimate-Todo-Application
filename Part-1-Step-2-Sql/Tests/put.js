@@ -128,7 +128,7 @@ describe("Api Put test  7", () => {
 });
 
 describe("Api Put test  8", () => {
-  it("should returns a object parameter status false", done => {
+  it("should returns a object property status", done => {
     chai
       .request("https://ultimate-todo-web-postgres.herokuapp.com")
       //THE ID HERE MAY CHANGE IN FUTURE
@@ -137,15 +137,14 @@ describe("Api Put test  8", () => {
         title: "Title for test"
       })
       .end((err, res) => {
-        res.body[res.body.length - 1].should.have.property("status")
-        .eql(false)
+        res.body[0].should.have.property("status");
         done();
       });
   });
 });
 
 describe("Api Put test  9", () => {
-  it("should returns a object parameter message Parameter missing", done => {
+  it("should returns a object property status false", done => {
     chai
       .request("https://ultimate-todo-web-postgres.herokuapp.com")
       //THE ID HERE MAY CHANGE IN FUTURE
@@ -154,19 +153,52 @@ describe("Api Put test  9", () => {
         title: "Title for test"
       })
       .end((err, res) => {
-        res.body[res.body.length - 1].should.have.property("message")
-        .eql("Parameters missing")
+        res.body[0].should.have.property("status")
+        .eql(false)
+        done();
+      });
+  });
+});
+
+describe("Api Put test  10", () => {
+  it("should returns a object property message", done => {
+    chai
+      .request("https://ultimate-todo-web-postgres.herokuapp.com")
+      //THE ID HERE MAY CHANGE IN FUTURE
+      .put("/todo/api/v1.0/todos/82e0bb0a-a9d0-4f8f-abd7-b18ed5abd51d")
+      .send({
+        title: "Title for test"
+      })
+      .end((err, res) => {
+        res.body[0].should.have.property("message")
         done();
       });
   });
 });
 
 describe("Api Put test  11", () => {
-  it("should returns server error 404 since api url is not correct", done => {
+  it("should returns a object property message with value", done => {
     chai
       .request("https://ultimate-todo-web-postgres.herokuapp.com")
       //THE ID HERE MAY CHANGE IN FUTURE
-      .put("/todo/api2/v1.0/todos/82e0bb0a-a9d0-4f8f-abd7-b18ed5abd51d")
+      .put("/todo/api/v1.0/todos/82e0bb0a-a9d0-4f8f-abd7-b18ed5abd51d")
+      .send({
+        title: "Title for test"
+      })
+      .end((err, res) => {
+        res.body[0].should.have.property("message")
+        .eql("Parameters missing");
+        done();
+      });
+  });
+});
+
+describe("Api Put test  12", () => {
+  it("should returns server error 404 since id is missing", done => {
+    chai
+      .request("https://ultimate-todo-web-postgres.herokuapp.com")
+      //THE ID HERE MAY CHANGE IN FUTURE
+      .put("/todo/api2/v1.0/todos")
       .send({
         title: "Title for test",
         description : "Description"
