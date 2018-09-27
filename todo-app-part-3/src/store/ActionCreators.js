@@ -1,13 +1,15 @@
-
 import { fireStore } from "../firebase";
 import { Actions } from "./Actions";
+import swal from 'sweetalert';
 import store from "./index";
+
 function insertTodoToFireStore(todoState) {
     return dispatch => {
+        console.log('inside dispatch of insertTOdo')
         fireStore.collection('todos').add(todoState)
-            .then(snapshot => dispatch({
-                type: Actions.addTodoSuccess,
-            }))
+            .then(snapshot => {
+                swal('Task added!', 'Your task has been added.', 'success');
+            })
             .catch(err => {
                 dispatch({
                     type: Actions.addTodoError,
@@ -18,18 +20,41 @@ function insertTodoToFireStore(todoState) {
 };
 
 fireStore.collection('todos').onSnapshot(snapshot => {
-    let todoArray = [];
-    snapshot.forEach(doc => {
-        todoArray.push({ id: doc.id, ...doc.data() });
-    })
-    store.dispatch({
-        type: Actions.readAllTodoSuccess,
-        payload: todoArray
-    })
-});
+    snapshot.docChanges().forEach(function (change) {
+        if (change.type === "added") {
+            console.log("New todo: ", change.doc.data());
+            store.dispatch({
+                type: Actions.addTodoSuccess,
+                payload: {
+                    id: change.doc.id,
+                    ...change.doc.data()
+                }
+            })
+        }
+        if (change.type === "modified") {
+            console.log("Modified todo: ", change.doc.data());
+            store.dispatch({
+                type: Actions.updateTodoSuccess,
+                payload: {
+                    id: change.doc.id,
+                    ...change.doc.data()
+                }
+            })
 
+        }
+        if (change.type === "removed") {
+            console.log("Removed todo: ", change.doc.data());
+            store.dispatch({
+                type: Actions.deleteTodoSuccess,
+                payload: change.doc.id
+            })
+            swal('Task removed!', 'Your task has been removed.', 'success');
+        }
+    });
+})
 function deleterTodoFromFireStore(todoId) {
     return dispatch => {
+        console.log('Inside the dispatch of delete todo')
         fireStore.collection('todos').doc(todoId).delete()
             .then(() => dispatch({
                 type: Actions.deleteTodoSuccess,
@@ -52,9 +77,9 @@ function updateTodoInFireStore({ updateDescription,
             description: updateDescription,
             doneStatus: updateDoneStatus
         })
-            .then(() => dispatch({
-                type: Actions.updateTodoSuccess
-            }))
+            .then(() => {
+                swal('Task modifeid!', 'Your task has been modifeid.', 'success');
+            })
             .catch(err => dispatch({
                 type: Actions.updateTodoError,
                 err
@@ -64,6 +89,7 @@ function updateTodoInFireStore({ updateDescription,
 
 function getAllTodosFromFireStore() {
     let allTodos = [];
+    console.log('inside getAllFromDatabase')
     return dispatch => {
         fireStore.collection('todos').get()
             .then(querySnapshot => {
@@ -81,21 +107,21 @@ function getAllTodosFromFireStore() {
 };
 
 
-function taskDoneAttempt(todo) {
+function taskDoneAttempt(todo, status) {
     return dispatch => {
-        console.log(todo);
+        console.log(todo, status);
         fireStore.collection('todos').doc(todo.id).update({
             title: todo.title,
             description: todo.description,
-            doneStatus: true
+            doneStatus: status
         })
-        .then( () => dispatch({
-            type : Actions.taskDoneSuccess
-        }))
-        .catch( err => dispatch({
-            type : Actions.taskDoneError,
-            err
-        }));
+            .then(() => {
+                swal('Task status updated!', 'Your task has been status updated.', 'success');
+            })
+            .catch(err => dispatch({
+                type: Actions.taskDoneError,
+                err
+            }));
     };
 };
 
