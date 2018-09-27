@@ -18,14 +18,19 @@ class testApi(unittest.TestCase):
         response=tester.get('/todo/api/v1.0/tasks',content_type='application/json')
         self.assertEqual(response.status_code, 200)
 
+    def test_show_single_task(self):
+        tester=app.test_client(self)
+        response=tester.get('/todo/api/v1.0/tasks/1', content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
     def test_add(self):
         tester = app.test_client(self)
-        response = tester.post('/todo/api/v1.0/tasks/add',data=json.dumps(dict({'title':'Gym'})), content_type='application/json')
+        response = tester.post('/todo/api/v1.0/tasks/add',data=json.dumps(dict({'title':'lunch'})), content_type='application/json')
         self.assertEqual(response.status_code, 200)
 
     def test_update_tasks(self):
         tester=app.test_client(self)
-        response = tester.put('/todo/api/v1.0/tasks/update/11', data= json.dumps(dict({'title':'homework'})), content_type='application/json')
+        response = tester.put('/todo/api/v1.0/tasks/update/10', data= json.dumps(dict({'title':'homework'})), content_type='application/json')
         self.assertEqual(response.status_code, 200)
 
     def test_delete_task(self):

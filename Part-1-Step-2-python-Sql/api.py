@@ -34,7 +34,7 @@ def show_tasks():
         return jsonify({'results': 'no tasks found'})
 
 @app.route('/todo/api/v1.0/tasks/<int:id>')
-def show_single_id(id):
+def show_single_task(id):
     task=todoApi.query.filter_by(id=int(id)).first()
     if task:
         taskItem={}
