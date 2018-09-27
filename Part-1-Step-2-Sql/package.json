@@ -7,8 +7,7 @@
     "build": "tsc",
     "dev": "ts-node ./lib/server.ts",
     "start": "nodemon ./dist/server.js",
-    "prod": "npm run build && npm run start",
-    "test": "mocha ./lib/Tests/test.js"
+    "prod": "npm run build && npm run start"
   },
   "author": "Adnan Hussain",
   "license": "ISC",
