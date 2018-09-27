@@ -28,8 +28,12 @@ def get_allTask():
         data.append({'id':t['id'],'name': t['name'] ,'done': t['done'] ,'priority': t['priority'] ,'desc': t['desc']})
     if data:
         return jsonify({'task': data})
-    return jsonify({"result":"No task found" })
-# search an specific with ID
+        print(len(data))
+
+    return jsonify({'task':"No task found" })
+
+
+
 @app.route('/api/v.1.0/<int:id>' , methods=['GET'])
 def search(id):
     query=todo.find_one({'id':id})
@@ -53,10 +57,11 @@ def add_data():
     desc = request.json['desc']
     add_id=todo.insert({'id':id,'name':name,'done':done,'priority':priority,'desc': desc})
     new_data=todo.find_one({'_id':add_id})
-
-    output = {'name': new_data['name'], 'done': new_data['done'], 'priority': new_data['priority'], 'desc': new_data['desc']}
-    return jsonify({'results': output})
-
+    if new_data:
+        output = {'name': new_data['name'], 'done': new_data['done'], 'priority': new_data['priority'], 'desc': new_data['desc']}
+        return jsonify({'results': output})
+    else:
+        return jsonify({'results': "failed"})
 
 
 @app.route('/api/v.1.0/<int:id>', methods=['PUT'])
@@ -112,9 +117,9 @@ def removed(id):
 
     if s:
         todo.remove({"id":id})
-        return 'record deleted'
+        return jsonify({"result": "recod deleted"})
     else:
-        return 'No record found'
+        return jsonify({"result": "No recod deleted"})
 
 
 
