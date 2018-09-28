@@ -10,7 +10,14 @@ class TodoController {
             status = true;
         else if (req.params.status === "false")
             status = false;
-        console.log(req.params.id);
+        else if (req.params.status === "null") {
+            res.status(404).send({ message: "Invalid Done Status" });
+        }
+        else if (req.params.status === "undefined") {
+            res.status(404).send({ message: "Invalid Done Status" });
+        }
+        else
+            res.status(404).send({ message: "Invalid Done Status" });
         ToDo.findByIdAndUpdate(req.params.id, { $set: { Done: status } }, { new: true }).then(data => {
             console.log(data);
             ToDo.findById({ _id: data._id }).then(realData => {
@@ -33,14 +40,16 @@ class TodoController {
         const task_id = req.params.id;
         ToDo.findById(task_id).then(data => {
             res.status(200).send(data);
-        });
+        }).catch(error => res.status(404).send({ message: "Record Not Found" }));
     }
     UpdateTask(req, res) {
         const task_id = req.params.id;
         ToDo.findByIdAndUpdate(task_id, { $set: req.body }).then(data => {
-            ToDo.findById({ _id: data._id }).then(realData => {
+            ToDo.findById(data._id).then(realData => {
                 res.status(200).send(realData);
             });
+        }).catch(() => {
+            res.status(500).send({ message: "Record Not Found" });
         });
     }
     DeleteTask(req, res) {
@@ -54,7 +63,7 @@ class TodoController {
                 }
             }
             res.send({ status: false });
-        });
+        }).catch(error => res.status(404).send({ status: false }));
     }
 }
 exports.TodoController = TodoController;
