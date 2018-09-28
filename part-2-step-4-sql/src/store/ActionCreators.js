@@ -126,8 +126,9 @@ function taskDoneAttempt(todoId, status) {
       .then(res => res.json())
       .then(data => {
         if (data[0]) {
+          console.log(data);
           dispatch({
-            type: Actions.taskDoneSuccess,
+            type: Actions.updateTodoSuccess,
             payload: data[0]
           });
         }

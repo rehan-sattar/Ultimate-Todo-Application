@@ -34,11 +34,12 @@ const ultimateTodoReducer = (state = defaultState, action) => {
                 if (todo.id === action.payload.id) {
                     todo.title = action.payload.title,
                         todo.description = action.payload.description,
-                        todo.doneStatus = action.payload.doneStatus
+                        todo.doneStatus = action.payload.done
                 };
+                swal('Status updated','Your status has been updated', 'success');
                 return todo
+                
             })
-
             break;
         case Actions.updateTodoError:
             console.log(action.err)

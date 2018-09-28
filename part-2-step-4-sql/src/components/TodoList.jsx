@@ -75,8 +75,8 @@ class TodoList extends Component {
                     <div className="row justify-content-center">
                         <div className="col-md-10 col-lg-10 col-sm-12">
                             {this.state.todos ? this.state.todos.map((todo, index) => {
-                                if (todo.done) {
-                                    console.log("if****",todo.done);
+                                if (!todo.doneStatus) {
+                                    console.log("Done Status: ",todo.done)
                                     return (
                                         <div className="card my-5" key={index}>
                                             <div className="card-body">
@@ -88,7 +88,7 @@ class TodoList extends Component {
                                                 </p>
                                                 <div className="btn-group float-right">
                                                     <button
-                                                        onClick={() => this.handleTaskdone(todo.id, false)}
+                                                        onClick={() => this.handleTaskdone(todo.id, true)}
                                                         className="btn btn-outline-success btn-lg card_btns"> <i className="fa fa-check"></i> </button>
                                                     <button
                                                         onClick={() => this.onOpenModal(todo.id)}
@@ -101,7 +101,8 @@ class TodoList extends Component {
                                         </div>
                                     )
                                 } else {
-                                    console.log("else****",todo.done);
+
+                                    console.log("Done Status: ",todo.done)
                                     return (
                                         <div className="card my-5 doneBody" key={index}>
                                             <div className="card-body">
@@ -113,7 +114,7 @@ class TodoList extends Component {
                                                 </p>
                                                 <div className="btn-group float-right">
                                                     <button
-                                                        onClick={() => this.handleTaskdone(todo.id, true)}
+                                                        onClick={() => this.handleTaskdone(todo.id, false)}
                                                         className="btn btn-outline-warning btn-lg card_btns"> <i className="fas fa-undo"></i> </button>
 
                                                     <button
