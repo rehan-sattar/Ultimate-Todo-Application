@@ -32,11 +32,6 @@ export class TodoController {
         ToDo.create(req.body).then(data => {
                const obj ={...data};
             res.status(200).send({data:obj._doc, status:obj.$__.inserting});
-           
-           
-           
-           
-            
         })
         
     }
@@ -57,6 +52,8 @@ export class TodoController {
             ToDo.findById(data._id).then(realData => {
                 res.status(200).send(realData)
             })
+        }).catch(() => {
+            res.status(500).send({message:"Record Not Found"})
         })
     }
     public DeleteTask (req:Request, res:Response){
