@@ -58,7 +58,7 @@ class TodoController {
             const obj = Object.assign({}, data);
             for (let key in obj) {
                 if (obj.hasOwnProperty(key)) {
-                    res.send({ status: true });
+                    res.send({ id: req.params.id, status: true });
                     return;
                 }
             }
