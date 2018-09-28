@@ -21,16 +21,26 @@ class TodoController {
     }
     (async function hit() {
       try {
+        const id = uuid();
         const response = await client.query(
           `INSERT INTO TODO(ID,TITLE,DESCRIPTION)
           VALUES($1,$2,$3)`,
-          [uuid(), title, description]
+          [id, title, description]
         );
-        const resSend = response.rowCount
-          ? { message: "Todo added successfully", status: true }
-          : { message: "Unable add a todo", status: false };
+        if (response.rowCount) {
+          let response2 = await client.query(
+            `SELECT * FROM TODO WHERE ID = $1`,
+            [id]
+          );
           client.end();
-        res.status(200).send([resSend]);
+          res
+            .status(200)
+            .send(
+              [{ message: "Todo added successfully", status: true }].concat(response2.rows)
+            );
+          return;
+        }
+        res.status(500).send([{ message: "Unable add a todo", status: false }]);
       } catch (err) {
         client.end();
         res
@@ -67,6 +77,7 @@ class TodoController {
           [id]
         );
         client.end();
+
         res.status(200).send(response.rows);
       } catch (err) {
         client.end();
@@ -98,9 +109,10 @@ class TodoController {
           [done, id]
         );
         if (response.rowCount) {
-          let response2 = await client.query(`SELECT * FROM TODO WHERE ID = $1`, [
-            id
-          ]);
+          let response2 = await client.query(
+            `SELECT * FROM TODO WHERE ID = $1`,
+            [id]
+          );
           client.end();
           res.status(200).send(
             response2.rows.concat([
@@ -190,8 +202,9 @@ class TodoController {
         ]);
         client.end();
         const resSend = response.rowCount
-          ? { message: "Todo deleted successfully", status: true }
-          : { message: "Unable deleted a todo", status: false };
+          ? { id, message: "Todo deleted successfully", status: true }
+          : { id, message: "Unable deleted a todo", status: false };
+
         res.status(200).send([resSend]);
       } catch (err) {
         client.end();

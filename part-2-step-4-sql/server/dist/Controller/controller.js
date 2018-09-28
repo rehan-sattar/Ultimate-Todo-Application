@@ -29,13 +29,18 @@ class TodoController {
         (function hit() {
             return __awaiter(this, void 0, void 0, function* () {
                 try {
+                    const id = uuid();
                     const response = yield client.query(`INSERT INTO TODO(ID,TITLE,DESCRIPTION)
-          VALUES($1,$2,$3)`, [uuid(), title, description]);
-                    const resSend = response.rowCount
-                        ? { message: "Todo added successfully", status: true }
-                        : { message: "Unable add a todo", status: false };
-                    client.end();
-                    res.status(200).send([resSend]);
+          VALUES($1,$2,$3)`, [id, title, description]);
+                    if (response.rowCount) {
+                        let response2 = yield client.query(`SELECT * FROM TODO WHERE ID = $1`, [id]);
+                        client.end();
+                        res
+                            .status(200)
+                            .send([{ message: "Todo added successfully", status: true }].concat(response2.rows));
+                        return;
+                    }
+                    res.status(500).send([{ message: "Unable add a todo", status: false }]);
                 }
                 catch (err) {
                     client.end();
@@ -104,9 +109,7 @@ class TodoController {
         SET DONE = $1
         WHERE ID = $2`, [done, id]);
                     if (response.rowCount) {
-                        let response2 = yield client.query(`SELECT * FROM TODO WHERE ID = $1`, [
-                            id
-                        ]);
+                        let response2 = yield client.query(`SELECT * FROM TODO WHERE ID = $1`, [id]);
                         client.end();
                         res.status(200).send(response2.rows.concat([
                             done
@@ -189,8 +192,8 @@ class TodoController {
                     ]);
                     client.end();
                     const resSend = response.rowCount
-                        ? { message: "Todo deleted successfully", status: true }
-                        : { message: "Unable deleted a todo", status: false };
+                        ? { id, message: "Todo deleted successfully", status: true }
+                        : { id, message: "Unable deleted a todo", status: false };
                     res.status(200).send([resSend]);
                 }
                 catch (err) {

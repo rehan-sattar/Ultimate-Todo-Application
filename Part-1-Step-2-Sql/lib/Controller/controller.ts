@@ -36,7 +36,7 @@ class TodoController {
           res
             .status(200)
             .send(
-              [{ message: "Todo added successfully", status: true }].concat()
+              [{ message: "Todo added successfully", status: true }].concat(response2.rows)
             );
           return;
         }
