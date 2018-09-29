@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css?family=Chicle|Comfortaa|Fira+Sans|Patua+One|Source+Sans+Pro');
+#header {
+ 
+  color: white;
+  font-size: 60px;
+  font-family: 'Chicle', cursive;
+}
+
+#tagLine{
+  font-size: 30px !important;
+  font-weight: normal !important;
+  font-family:'Patua One', cursive !important;
+}
+#form-container {
+  background-color: #fff;
+  /* border-radius: 10px; */
+ }
+
+.form-control{
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 20px;
+}
+
+.form-control:focus{
+  border-radius: 0px !important;
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 20px;
+ }
+
+#addTaskHeadline{
+  color: #1976D2;
+  font-family:'Patua One', cursive;
+  margin-top: 10px;
+}
+
+.cstmBtn {
+  border-radius: 0px !important;
+  color: #1976D2;
+  font-family: 'Patua One', cursive;
+  background-color: #fff;
+  border: 1px solid #1976D2;
+}
+.cstmBtn:hover {
+  border-radius: 0px !important;
+  color: white;
+  font-family: 'Patua One', cursive;
+  background-color:#29B6F6;
+  border: 1px solid #fff;
+}
+.todoHeadings {
+  font-family: 'Comfortaa', cursive;
+  font-size: 30px !important; 
+}
+
+.todotext {
+  font-family: 'Comfortaa', cursive;
+}
+.crossed {
+  text-decoration: line-through;
+}
+
+.card_btns {
+  border-radius: 100px !important;
+}
+.doneBody {
+  color: white;
+  background-color: #212121
+}
