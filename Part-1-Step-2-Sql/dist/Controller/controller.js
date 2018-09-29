@@ -95,7 +95,7 @@ class TodoController {
         client.connect();
         const { done } = req.body;
         const { id } = req.params;
-        if (!done) {
+        if (done == undefined) {
             client.end();
             res
                 .status(500)

@@ -12,7 +12,7 @@ describe("Api Put test 1", () => {
     chai
       .request("https://ultimate-todo-web-postgres.herokuapp.com")
       //THE ID HERE MAY CHANGE IN FUTURE
-      .put("/todo/api/v1.0/todos/ID")
+      .put("/todo/api/v1.0/todos/890fac24-735b-441e-ac2d-636d5dcf8148")
       .send({
         title: "Title for test",
         description: "New description"
@@ -29,7 +29,7 @@ describe("Api Put test 2", () => {
     chai
       .request("https://ultimate-todo-web-postgres.herokuapp.com")
       //THE ID HERE MAY CHANGE IN FUTURE
-      .put("/todo/api/v1.0/todos/ID")
+      .put("/todo/api/v1.0/todos/890fac24-735b-441e-ac2d-636d5dcf8148")
       .send({
         title: "Title for test",
         description: "New description"
@@ -46,7 +46,7 @@ describe("Api Put test  3", () => {
     chai
       .request("https://ultimate-todo-web-postgres.herokuapp.com")
       //THE ID HERE MAY CHANGE IN FUTURE
-      .put("/todo/api/v1.0/todos/ID")
+      .put("/todo/api/v1.0/todos/890fac24-735b-441e-ac2d-636d5dcf8148")
       .send({
         title: "Title for test",
         description: "New description"
@@ -54,7 +54,7 @@ describe("Api Put test  3", () => {
       .end((err, res) => {
         res.body[0].should.have
           .property("id")
-          .eql("ID");
+          .eql("890fac24-735b-441e-ac2d-636d5dcf8148");
         res.body[0].should.have.property("title").eql("Title for test");
         res.body[0].should.have.property("description").eql("New description");
         res.body[0].should.have.property("done");
@@ -68,7 +68,7 @@ describe("Api Put test  4", () => {
     chai
       .request("https://ultimate-todo-web-postgres.herokuapp.com")
       //THE ID HERE MAY CHANGE IN FUTURE
-      .put("/todo/api/v1.0/todos/ID")
+      .put("/todo/api/v1.0/todos/890fac24-735b-441e-ac2d-636d5dcf8148")
       .send({
         title: "Title for test",
         description: "New description"
@@ -85,7 +85,7 @@ describe("Api Put test  5", () => {
     chai
       .request("https://ultimate-todo-web-postgres.herokuapp.com")
       //THE ID HERE MAY CHANGE IN FUTURE
-      .put("/todo/api/v1.0/todos/ID")
+      .put("/todo/api/v1.0/todos/890fac24-735b-441e-ac2d-636d5dcf8148")
       .send({
         title: "Title for test",
         description: "New description"
@@ -104,7 +104,7 @@ describe("Api Put test  6", () => {
     chai
       .request("https://ultimate-todo-web-postgres.herokuapp.com")
       //THE ID HERE MAY CHANGE IN FUTURE
-      .put("/todo/api/v1.0/todos/ID")
+      .put("/todo/api/v1.0/todos/890fac24-735b-441e-ac2d-636d5dcf8148")
       .send({
         title: "Title for test",
         description: "New description"
@@ -121,7 +121,7 @@ describe("Api Put test  7", () => {
     chai
       .request("https://ultimate-todo-web-postgres.herokuapp.com")
       //THE ID HERE MAY CHANGE IN FUTURE
-      .put("/todo/api/v1.0/todos/ID")
+      .put("/todo/api/v1.0/todos/890fac24-735b-441e-ac2d-636d5dcf8148")
       .send({
         title: "Title for test",
         description: "New description"
@@ -138,7 +138,7 @@ describe("Api Put test  8", () => {
     chai
       .request("https://ultimate-todo-web-postgres.herokuapp.com")
       //THE ID HERE MAY CHANGE IN FUTURE
-      .put("/todo/api/v1.0/todos/ID")
+      .put("/todo/api/v1.0/todos/890fac24-735b-441e-ac2d-636d5dcf8148")
       .send({
         title: "Title for test"
       })
@@ -154,7 +154,7 @@ describe("Api Put test  9", () => {
     chai
       .request("https://ultimate-todo-web-postgres.herokuapp.com")
       //THE ID HERE MAY CHANGE IN FUTURE
-      .put("/todo/api/v1.0/todos/ID")
+      .put("/todo/api/v1.0/todos/890fac24-735b-441e-ac2d-636d5dcf8148")
       .send({
         title: "Title for test"
       })
@@ -170,7 +170,7 @@ describe("Api Put test  10", () => {
     chai
       .request("https://ultimate-todo-web-postgres.herokuapp.com")
       //THE ID HERE MAY CHANGE IN FUTURE
-      .put("/todo/api/v1.0/todos/ID")
+      .put("/todo/api/v1.0/todos/890fac24-735b-441e-ac2d-636d5dcf8148")
       .send({
         title: "Title for test"
       })
@@ -186,7 +186,7 @@ describe("Api Put test  11", () => {
     chai
       .request("https://ultimate-todo-web-postgres.herokuapp.com")
       //THE ID HERE MAY CHANGE IN FUTURE
-      .put("/todo/api/v1.0/todos/ID")
+      .put("/todo/api/v1.0/todos/890fac24-735b-441e-ac2d-636d5dcf8148")
       .send({
         title: "Title for test"
       })
@@ -201,7 +201,7 @@ describe("Api Put test  12", () => {
     chai
       .request("https://ultimate-todo-web-postgres.herokuapp.com")
       //THE ID HERE MAY CHANGE IN FUTURE
-      .put("/todo/api/v1.0/todos/ID")
+      .put("/todo/api/v1.0/todos/890fac24-735b-441e-ac2d-636d5dcf8148")
       .send({
         title: "Title for test"
       })
@@ -218,7 +218,7 @@ describe("Api Put test  13", () => {
     chai
       .request("https://ultimate-todo-web-postgres.herokuapp.com")
       //THE ID HERE MAY CHANGE IN FUTURE
-      .put("/todo/api/v1.0/todos/ID")
+      .put("/todo/api/v1.0/todos/890fac24-735b-441e-ac2d-636d5dcf8148")
       .send({
         title: "Title for test"
       })

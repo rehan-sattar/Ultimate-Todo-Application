@@ -12,7 +12,7 @@ describe("Api Delete test 1", () => {
     chai
       .request("https://ultimate-todo-web-postgres.herokuapp.com")
       //THE ID HERE MAY CHANGE IN FUTURE
-      .delete("/todo/api/v1.0/todos/ID")
+      .delete("/todo/api/v1.0/todos/55d02b6b-fd08-490c-87fa-c211bfcb84f6") //ID
       .end((err, res) => {
         res.should.have.status(200);
         done();
@@ -25,7 +25,7 @@ describe("Api Delete test 2", () => {
     chai
       .request("https://ultimate-todo-web-postgres.herokuapp.com")
       //THE ID HERE MAY CHANGE IN FUTURE
-      .delete("/todo/api/v1.0/todos/ID") 
+      .delete("/todo/api/v1.0/todos/890fac24-735b-441e-ac2d-636d5dcf8148") //ID
       .end((err, res) => {
         res.body.should.be.a("array");
         done();
@@ -38,7 +38,7 @@ describe("Api Delete test  3", () => {
     chai
       .request("https://ultimate-todo-web-postgres.herokuapp.com")
       //THE ID HERE MAY CHANGE IN FUTURE
-      .delete("/todo/api/v1.0/todos/ID")
+      .delete("/todo/api/v1.0/todos/3d95e228-b96d-47d1-82a9-df9d48d8404c") //ID
       .end((err, res) => {
         res.body[res.body.length - 1].should.have.property("message");
         done();
@@ -51,7 +51,7 @@ describe("Api Delete test  4", () => {
     chai
       .request("https://ultimate-todo-web-postgres.herokuapp.com")
       //THE ID HERE MAY CHANGE IN FUTURE
-      .delete("/todo/api/v1.0/todos/ID")
+      .delete("/todo/api/v1.0/todos/8238cda5-38d2-41af-bd35-b720fe9add6b") //ID
       .end((err, res) => {
         res.body[res.body.length - 1].should.have
           .property("message")
@@ -66,7 +66,7 @@ describe("Api Delete test  5", () => {
     chai
       .request("https://ultimate-todo-web-postgres.herokuapp.com")
       //THE ID HERE MAY CHANGE IN FUTURE
-      .delete("/todo/api/v1.0/todos/ID")
+      .delete("/todo/api/v1.0/todos/6f4c3bec-d47d-499a-8b22-c27aada08ea6") //ID
       .end((err, res) => {
         res.body[res.body.length - 1].should.have.property("status");
         done();
@@ -79,7 +79,7 @@ describe("Api Delete test  6", () => {
     chai
       .request("https://ultimate-todo-web-postgres.herokuapp.com")
       //THE ID HERE MAY CHANGE IN FUTURE
-      .delete("/todo/api/v1.0/todos/ID")
+      .delete("/todo/api/v1.0/todos/b2207147-7745-48b9-8941-baedb8846fe8") //ID
       .end((err, res) => {
         res.body[res.body.length - 1].should.have.property("id");
         done();
@@ -92,11 +92,11 @@ describe("Api Delete test  7", () => {
     chai
       .request("https://ultimate-todo-web-postgres.herokuapp.com")
       //THE ID HERE MAY CHANGE IN FUTURE
-      .delete("/todo/api/v1.0/todos/ID")//Put ID of Todo
+      .delete("/todo/api/v1.0/todos/bdad7f54-ba9f-4c0b-9dd1-0422571ba647") //ID
       .end((err, res) => {
         res.body[res.body.length - 1].should.have
           .property("id")
-          .eql("ID");//Put ID
+          .eql("bdad7f54-ba9f-4c0b-9dd1-0422571ba647");
         done();
       });
   });
@@ -107,7 +107,7 @@ describe("Api Delete test  8", () => {
     chai
       .request("https://ultimate-todo-web-postgres.herokuapp.com")
       //THE ID HERE MAY CHANGE IN FUTURE
-      .delete("/todo/api/v1.0/todos/ID")
+      .delete("/todo/api/v1.0/todos/f90d37ea-d049-4d75-b1e4-11c3e99ca474") //ID
       .end((err, res) => {
         res.body[res.body.length - 1].should.have.property("status").eql(true);
         done();
@@ -133,7 +133,7 @@ describe("Api Delete test  10", () => {
     chai
       .request("https://ultimate-todo-web-postgres.herokuapp.com")
       //THE ID HERE MAY CHANGE IN FUTURE
-      .delete("/todo/api/v1.0/todos/ID_Dummy") //Put here a dummy id which not exist
+      .delete("/todo/api/v1.0/todos/50") //ID
       .end((err, res) => {
         res.should.have.status("200");
         res.body[res.body.length - 1].should.have.property("status").eql(false);
@@ -147,7 +147,7 @@ describe("Api Delete test  11", () => {
     chai
       .request("https://ultimate-todo-web-postgres.herokuapp.com")
       //THE ID HERE MAY CHANGE IN FUTURE
-      .delete("/todo/api/v1.0/todos/Dummy_Id") //Dummy Id
+      .delete("/todo/api/v1.0/todos/50") //ID
       .end((err, res) => {
         res.body[res.body.length - 1].should.have
           .property("message")
@@ -162,7 +162,7 @@ describe("Api Delete test  12", () => {
     chai
       .request("https://ultimate-todo-web-postgres.herokuapp.com")
       //THE ID HERE MAY CHANGE IN FUTURE
-      .delete("/todo1/api2/v1.2/todos/Dummy_ID")
+      .delete("/todo1/api2/v1.2/todos/50") //ID
       .end((err, res) => {
         res.should.have.status("404");
         done();
