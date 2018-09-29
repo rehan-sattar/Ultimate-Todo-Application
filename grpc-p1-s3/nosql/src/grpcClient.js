@@ -26,7 +26,7 @@ function insertTodo(req, res) {
     };
     client.insert(todo, function (err, empty) {
         if (err) throw err;
-        res.send({ status: success })
+        res.send({ status: true })
     });
 }
 
@@ -46,7 +46,7 @@ function updateTodo(req, res) {
     };
     client.update(todo, function (err, empty) {
         if (err) throw err;
-        res.send({ status: success })
+        res.send({ status: true })
     });
 }
 
@@ -64,7 +64,7 @@ function updateStatus(req, res) {
 function deleteTodo(req, res) {
     client.delete({ id: parseInt(req.params.id) }, function (err, todo) {
         if (err) throw err;
-        res.send({ status: success })
+        res.send({ status: true })
     });
 }
 
