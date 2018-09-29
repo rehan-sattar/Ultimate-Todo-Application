@@ -3,7 +3,6 @@ import swal from "sweetalert";
 const API_END_POINT = "https://ultimate-todo-web-postgres.herokuapp.com";
 function insertTodoToDatabase(todoState) {
   return dispatch => {
-    console.log(todoState);
     fetch(`${API_END_POINT}/todo/api/v1.0/todos`, {
       method: "post",
       headers: {
@@ -16,7 +15,6 @@ function insertTodoToDatabase(todoState) {
     })
       .then(res => res.json())
       .then(data => {
-        console.log(data);
         if (data) {
           dispatch({
             type: Actions.addTodoSuccess,
@@ -35,7 +33,6 @@ function insertTodoToDatabase(todoState) {
 
 function deleterTodoFromDatabase(todoId) {
   return dispatch => {
-    console.log(todoId);
     fetch(`${API_END_POINT}/todo/api/v1.0/todos/${todoId}`, {
       method: "delete"
     })
@@ -96,7 +93,6 @@ function getAllTodosFromDatabase() {
     fetch(`${API_END_POINT}/todo/api/v1.0/todos`)
       .then(res => res.json())
       .then(data => {
-        console.log(data);
         dispatch({
           type: Actions.readAllTodoSuccess,
           payload: data
@@ -113,7 +109,6 @@ function getAllTodosFromDatabase() {
 
 function taskDoneAttempt(todoId, status) {
   return dispatch => {
-    console.log("taskDoneAttempt*****", todoId, status);
     fetch(`${API_END_POINT}/todo/api/v1.0/todos/done/${todoId}`, {
       method: "put",
       headers: {
@@ -126,7 +121,6 @@ function taskDoneAttempt(todoId, status) {
       .then(res => res.json())
       .then(data => {
         if (data[0]) {
-          console.log(data);
           dispatch({
             type: Actions.updateTodoSuccess,
             payload: data[0]

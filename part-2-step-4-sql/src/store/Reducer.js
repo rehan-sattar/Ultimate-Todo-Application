@@ -10,7 +10,6 @@ const ultimateTodoReducer = (state = defaultState, action) => {
     switch (action.type) {
         // add task
         case Actions.addTodoSuccess:
-            console.log(action.payload);
             updatedState.allTodos = [action.payload, ...updatedState.allTodos]
             // updatedState.addedTodo = true;
             break;
@@ -42,7 +41,6 @@ const ultimateTodoReducer = (state = defaultState, action) => {
             })
             break;
         case Actions.updateTodoError:
-            console.log(action.err)
             swal(`Error: ${action.err} !`);
             break;
         case Actions.taskDoneError:

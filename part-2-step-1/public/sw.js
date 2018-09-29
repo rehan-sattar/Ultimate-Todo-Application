@@ -5,8 +5,8 @@
 const staticAssets = [
     "/",
     "manifest.json",
-    "./static/css/main.867e728e.css","./static/css/main.867e728e.css.map", //CSS
-    "./static/js/main.d7fd13d3.js",'./static/js/main.d7fd13d3.js.map' //JS
+    "./static/css/**.css", //CSS
+    "./static/js/**.js" //JS
   ];
   
   var staticCache = "v1";

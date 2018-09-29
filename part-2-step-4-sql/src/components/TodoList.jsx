@@ -41,7 +41,6 @@ class TodoList extends Component {
     }
 
     componentWillReceiveProps(props) {
-        console.log(props);
         this.setState({
             todos: props.todos
         });
@@ -76,7 +75,6 @@ class TodoList extends Component {
                         <div className="col-md-10 col-lg-10 col-sm-12">
                             {this.state.todos ? this.state.todos.map((todo, index) => {
                                 if (!todo.doneStatus) {
-                                    console.log("Done Status: ",todo.done)
                                     return (
                                         <div className="card my-5" key={index}>
                                             <div className="card-body">
@@ -102,7 +100,6 @@ class TodoList extends Component {
                                     )
                                 } else {
 
-                                    console.log("Done Status: ",todo.done)
                                     return (
                                         <div className="card my-5 doneBody" key={index}>
                                             <div className="card-body">
