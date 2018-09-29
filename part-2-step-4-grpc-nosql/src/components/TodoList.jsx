@@ -76,7 +76,7 @@ class TodoList extends Component {
                     <div className="row justify-content-center">
                         <div className="col-md-10 col-lg-10 col-sm-12">
                             {this.state.todos ? this.state.todos.map((todo, index) => {
-                                if (!todo.doneStatus) {
+                                if (!todo.done) {
                                     console.log("Done Status: ",todo.done)
                                     return (
                                         <div className="card my-5" key={index}>

@@ -28,10 +28,16 @@ function insertTodoToDatabase(todoState) {
                                 payload: data
                             })
                         })
-                        .catch(err => console.log(err))
+                        .catch(err => dispatch({
+                            type: Actions.addTodoError,
+                            err
+                        }))
                 }
             })
-            .catch(err => console.log(err))
+            .catch(err => dispatch({
+                type: Actions.addTodoError,
+                err
+            }))
     };
 };
 
@@ -57,9 +63,15 @@ function deleterTodoFromDatabase(todoId) {
                             payload: data
                         })
                     })
-                    .catch(err => console.log(err))
+                    .catch(err => dispatch({
+                        type: Actions.deleteTodoError,
+                        err
+                    }))
             })
-            .catch(err => console.log(err))
+            .catch(err => dispatch({
+                type: Actions.deleteTodoError,
+                err
+            }))
     }
 };
 
@@ -109,19 +121,45 @@ function getAllTodosFromDatabase() {
                     payload: data
                 })
             })
-            .catch(err => console.log(err))
+            .catch(err => dispatch({
+                type : Actions.readAllTodoError,
+                err
+            }))
     };
 };
 
 
-function taskDoneAttempt(todo) {
+
+function taskDoneAttempt(todo, status) {
     return dispatch => {
-        fetch(``)
-            .then()
-            .then()
-            .catch()
+        fetch(`${API_END_POINT}/todo/api/v1.0//tasks/status/edit/${todo}`, {
+            method: 'PUT',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                done: status
+            })
+        })
+            .then(res => res.json())
+            .then(data => {
+                fetch(`${API_END_POINT}/todo/api/v1.0/tasks`)
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log(data)
+                        dispatch({
+                            type: Actions.readAllTodoSuccess,
+                            payload: data
+                        })
+                    })
+            })
+            .catch(err => dispatch({
+                type: Actions.taskDoneError,
+                err
+            }))
     };
 };
+
 
 function getSpecificTodo() {
 
