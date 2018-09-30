@@ -31,11 +31,14 @@ const ultimateTodoReducer = (state = defaultState, action) => {
             swal(`Error: ${action.err} !`);
             break;
         case Actions.updateTodoSuccess:
+            console.log(updatedState.allTodos);
+            console.log(action.payload)
             updatedState.allTodos = updatedState.allTodos.filter(todo => {
-                if (todo.id === action.payload.id) {
-                    todo.title = action.payload.title,
-                        todo.description = action.payload.description,
-                        todo.doneStatus = action.payload.doneStatus
+                if (todo['_id'] === action.payload._id) {
+                    console.log('here');
+                    todo.Title = action.payload.Title,
+                        todo.Description = action.payload.Description,
+                        todo.Done = action.payload.Done
                 };
                 return todo
             })

@@ -41,6 +41,7 @@ class TodoList extends Component {
     }
 
     componentWillReceiveProps(props) {
+        console.log(props.todos)
         this.setState({
             todos: props.todos         
         });
@@ -86,7 +87,7 @@ class TodoList extends Component {
                                                 </p>
                                                 <div className="btn-group float-right">
                                                     <button
-                                                        onClick={() => this.handleTaskdone(todo._id, false)}
+                                                        onClick={() => this.handleTaskdone(todo._id, true)}
                                                         className="btn btn-outline-success btn-lg card_btns"> <i className="fa fa-check"></i> </button>
                                                     <button
                                                         onClick={() => this.onOpenModal(todo._id)}
@@ -163,7 +164,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
     downloadTodos: (Todostate) => getAllTodosFromDatabase(Todostate),
     deleteATask: (todoId) => deleterTodoFromDatabase(todoId),
     updateTodoTask: (newTodoObject) => updateTodoInDatabase(newTodoObject),
-    changeDoneStatus: (todo) => taskDoneAttempt(todo)
+    changeDoneStatus: (todo, status) => taskDoneAttempt(todo, status)
 },
     dispatch);
 export default connect(mapStateToProps, mapDispatchToProps)(TodoList);

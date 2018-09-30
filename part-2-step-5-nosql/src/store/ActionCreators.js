@@ -2,7 +2,8 @@
 import { Actions } from "./Actions";
 import swal from "sweetalert";
 import { Observable } from "rxjs";
-const API_END_POINT = 'http://localhost:2000';
+import { Action } from "rxjs/internal/scheduler/Action";
+const API_END_POINT = 'https://nodejs-todo-server.herokuapp.com';
 function insertTodoToDatabase({ title, description }) {
     return dispatch => {
         const addTodoObserve$ = Observable.create(observer$ => {
@@ -119,23 +120,32 @@ function getAllTodosFromDatabase() {
     };
 };
 
-function taskDoneAttempt(todo, status) {
+function taskDoneAttempt(id, status) {
     return dispatch => {
-        fetch(``)
-            .then(res => res.json())
-            .then(data => {
-                if (data.status) {
-                    swal('Wohaamiii!!', 'Your task has been updated', 'success');
-                    dispatch({
-                        type: Actions.updateTodoSuccess,
-                        payload: data
-                    })
+        const taskDone$ = Observable.create(observer$ => {
+            fetch(`https://nodejs-todo-server.herokuapp.com/todo/api/v1.0/tasks/${id}/${status}`, {
+                method: 'PUT',
+                headers: {
+                    "Content-Type": "application/json"
                 }
             })
-            .catch(err => dispatch({
-                type: Actions.readAllTodoError,
-                err
-            }))
+                .then(res => res.json())
+                .then(data => {
+                    if (data) {
+                        observer$.next(data);
+                        observer$.complete();
+                    }
+                })
+                .catch(err => observer$.error(err));
+        })
+
+        taskDone$.subscribe(data => dispatch({
+            type: Actions.updateTodoSuccess,
+            payload: data
+        }), err => dispatch({
+            type: Actions.updateTodoError,
+            err
+        }))
     };
 };
 
