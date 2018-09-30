@@ -1,4 +1,4 @@
-
+import requests
 import unittest
 import json
 import app
@@ -34,7 +34,7 @@ class TestApi(unittest.TestCase):
         response = self.app.get(url)
         data = json.loads(response.get_data())
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(data['task']), app.todo.count())
+        self.assertEqual(len(data['task']), check.todo.count())
 
         response = self.app.put(url)
         self.assertEqual(response.status_code, 405)
@@ -55,7 +55,7 @@ class TestApi(unittest.TestCase):
          self.assertEqual(response.status_code, 200)
 
 
-#
+
     def test_task_not_exist(self):
         response = self.app.get(bad_url+'/2')
         self.assertEqual(response.status_code, 404)
@@ -136,7 +136,7 @@ class TestApi(unittest.TestCase):
 
     def test_update(self):
         task={"desc": "coding and coding","done": "no","name": "update","priority": "low"}
-        response = self.app.put(url+'/8',data=json.dumps(task),content_type='application/json')
+        response = self.app.put(url+'/15',data=json.dumps(task),content_type='application/json')
         data1 = json.loads(response.get_data())
         self.assertEqual(data1["result"],  "success")
         self.assertEqual(response.status_code, 200)
@@ -151,18 +151,75 @@ class TestApi(unittest.TestCase):
 
     def test_delete(self):
 
-        response = self.app.delete(url +'/2')
+        response = self.app.delete(url+'/8')
         data=json.loads(response.get_data())
         self.assertEqual(data["result"],"record deleted")
         self.assertEqual(response.status_code, 200)
 
         response = self.app.delete(url+'/222')
-        data1 = json.loads(response.get_data())
-        self.assertEqual(data1["result"], "No record deleted")
+        data = json.loads(response.get_data())
+        self.assertEqual(data["result"], "No record deleted")
         self.assertEqual(response.status_code, 200)
 
         response = self.app.delete(bad_url+'/222')
         self.assertEqual(response.status_code, 404)
+
+    def test_keyErrors(self):
+        task = { "name": "coding", "done": "no", "priority": "high", "desc": "coding and coding"}
+        response = self.app.post(url, data=json.dumps(task), content_type='application/json')
+        data=json.loads(response.get_data())
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['Error'], "KeyError")
+
+        task = {"id":33, "done": "no", "priority": "high", "desc": "coding and coding"}
+        response = self.app.post(url, data=json.dumps(task), content_type='application/json')
+        data = json.loads(response.get_data())
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['Error'], "KeyError")
+
+
+        task = {"id":33,"name":"unknown" , "priority": "high", "desc": "coding and coding"}
+        response = self.app.post(url, data=json.dumps(task), content_type='application/json')
+        data = json.loads(response.get_data())
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['Error'], "KeyError")
+
+        task = {"id": 33, "name": "unknown","done":"no",  "desc": "coding and coding"}
+        response = self.app.post(url, data=json.dumps(task), content_type='application/json')
+        data = json.loads(response.get_data())
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['Error'], "KeyError")
+        task = {"id": 33, "name": "unknown","done":"no","priority":"high" }
+        response = self.app.post(url, data=json.dumps(task), content_type='application/json')
+        data = json.loads(response.get_data())
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['Error'], "KeyError")
+
+        task = {"id": 33, "name": "unknown", "done": "no"}
+        response = self.app.post(url, data=json.dumps(task), content_type='application/json')
+        data = json.loads(response.get_data())
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['Error'], "KeyError")
+
+        task = {"id": 33, "name": "unknown"}
+        response = self.app.post(url, data=json.dumps(task), content_type='application/json')
+        data = json.loads(response.get_data())
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['Error'], "KeyError")
+
+
+        task = {"id": 33 }
+        response = self.app.post(url, data=json.dumps(task), content_type='application/json')
+        data = json.loads(response.get_data())
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['Error'], "KeyError")
+
+
+        task = {}
+        response = self.app.post(url, data=json.dumps(task), content_type='application/json')
+        data = json.loads(response.get_data())
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['Error'], "KeyError")
 
 
 

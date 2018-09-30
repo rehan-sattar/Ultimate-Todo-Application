@@ -1,4 +1,5 @@
-from flask import Flask ,request,jsonify
+from flask import Flask ,request,jsonify,abort
+import json
 from flask_pymongo import PyMongo
 from flask_cors import CORS
 
@@ -18,9 +19,34 @@ def home():
     <h1>TO DO APP</h1>
     <h2>Welcome</h2>
      '''
+
+# Inserting new data
+@app.route('/api/v.1.0' , methods=['POST'])
+def add_data():
+
+    if request.method=='GET' or request.method=='PUT' or request.method=='DELETE':
+        abort(405)
+    try:
+        data=json.loads(request.data)
+        add_id=todo.insert({'id':data['id'],'name':data['name'],'done':data['done'],'priority':data['priority'],'desc': data['desc']})
+    except(KeyError,ValueError,TypeError) as e:
+        return jsonify({"Error":"KeyError"})
+
+    new_data=todo.find_one({'_id':add_id})
+    if new_data:
+        output = {'name': new_data['name'], 'done': new_data['done'], 'priority': new_data['priority'], 'desc': new_data['desc']}
+        return jsonify({'results': output})
+    else:
+        return jsonify({'results': "failed"})
+
+
+
+
 #Getting All task in DB
 @app.route('/api/v.1.0', methods=['GET'] )
 def get_allTask():
+    if request.method == 'POST' or request.method == 'PUT' or request.method == 'DELETE':
+        return abort(405)
 
     data = []
 
@@ -28,7 +54,7 @@ def get_allTask():
         data.append({'id':t['id'],'name': t['name'] ,'done': t['done'] ,'priority': t['priority'] ,'desc': t['desc']})
     if data:
         return jsonify({'task': data})
-        print(len(data))
+
 
     return jsonify({'task':"No task found" })
 
@@ -36,6 +62,9 @@ def get_allTask():
 
 @app.route('/api/v.1.0/<int:id>' , methods=['GET'])
 def search(id):
+    if request.method == 'POST' or request.method == 'PUT' or request.method == 'DELETE':
+        return abort(405)
+
     query=todo.find_one({'id':id})
     if query:
         output=[{'id':query['id'],'name':query['name'],'done':query['done'],'priority':query['priority'],'description':query['desc']}]
@@ -45,27 +74,13 @@ def search(id):
 
 
 
-# Inserting new data
-@app.route('/api/v.1.0' , methods=['POST'])
-def add_data():
-
-    id=request.json['id']
-    name=request.json['name']
-
-    done = request.json['done']
-    priority = request.json['priority']
-    desc = request.json['desc']
-    add_id=todo.insert({'id':id,'name':name,'done':done,'priority':priority,'desc': desc})
-    new_data=todo.find_one({'_id':add_id})
-    if new_data:
-        output = {'name': new_data['name'], 'done': new_data['done'], 'priority': new_data['priority'], 'desc': new_data['desc']}
-        return jsonify({'results': output})
-    else:
-        return jsonify({'results': "failed"})
-
-
 @app.route('/api/v.1.0/<int:id>', methods=['PUT'])
 def update_data(id):
+    if request.method=='POST' or request.method=='GET':
+        return abort(405)
+
+
+
     find=todo.find_one({"id":id})
     if find:
         #find['id']=request.json['id']
@@ -83,8 +98,11 @@ def update_data(id):
 
 
 # all completed task
-@app.route('/api/v.1.0/completed')
+@app.route('/api/v.1.0/completed', methods=['GET'])
 def complete():
+    if request.method=='POST' or request.method=='PUT' or request.method=='DELETE':
+        return abort(405)
+
     data = []
     task=todo.find({"done":"yes"})
 
@@ -97,8 +115,12 @@ def complete():
         return jsonify({'results':'No task completed yet'})
 
 # get all incompleted task
-@app.route('/api/v.1.0/uncompleted')
+@app.route('/api/v.1.0/uncompleted', methods=['GET'])
 def uncomplete():
+
+    if request.method=='POST' or request.method=='PUT' or request.method=='DELETE':
+        return abort(405)
+
     data = []
     task=todo.find({"done":"no"})
 
@@ -111,15 +133,18 @@ def uncomplete():
         return jsonify({'results':'No task incomplete Found'})
 
 # Deleting a specific data with id
-@app.route('/api/v.1.0/<int:id>', methods=['DELETE'])
+@app.route('/api/v.1.0/<int:id>', methods=[ 'DELETE'])
 def removed(id):
+    if request.method == 'POST' or request.method == 'PUT' or request.method == 'GET':
+         return abort(405)
+
     s=todo.find_one({"id":id})
 
     if s:
         todo.remove({"id":id})
-        return jsonify({"result": "recod deleted"})
+        return jsonify({'result':'record deleted'})
     else:
-        return jsonify({"result": "No recod deleted"})
+        return jsonify({'result': 'No record deleted'})
 
 
 
