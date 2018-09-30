@@ -1,65 +1,121 @@
+
 const PROTO_PATH = __dirname + '../../../protos/todo.proto';
 const grpc = require('grpc');
 var protoLoader = require('@grpc/proto-loader');
-const { Client } = require('pg')
 
-
-// gRPC
 var packageDefinition = protoLoader.loadSync(PROTO_PATH, { keepCase: true, enums: String, defaults: true, oneofs: true });
 var todoproto = grpc.loadPackageDefinition(packageDefinition).todoproto;
 const server = new grpc.Server();
 
+global.Mongoose = require('mongoose');
+var mongoDB = 'mongodb://teamdelta:teamdelta123@ds025429.mlab.com:25429/ultimate-todo';
+Mongoose.Promise = global.Promise;
+Mongoose.connect(mongoDB, { useNewUrlParser: true })
+    .then(() => console.log('Mongodb connection succesful'))
+    .catch((err) => console.error(err));
+Mongoose.set('useCreateIndex', true);
+const TodoDb = require('./tododb');
 
-// Postgress
-const connectionString = 'postgres://xyjvkyce:sVCMeL4qO5N9bp3NTU9qllxVOt_UdkPw@horton.elephantsql.com:5432/xyjvkyce'
-const db = new Client({  
-    connectionString: connectionString,
-})
-db.connect((err) => {
-    if (err) throw err;
-    console.log('postgres connected')
+// static code works without database
+// var todos = [{
+//     id: 0,
+//     title: 'Ultimate Todo App',
+//     description: 'Ultimate Todo App Projects assigned by Sir Zia Khan and Team'
+// }];
 
-})
-
-//gRPC Service
 server.addService(todoproto.TodoService.service, {
 
     list: function (_, callback) {
 
-        db.query(`SELECT * FROM Todos`, (err, res) => {
-            if (err) throw err;
-            callback(null, { todos: res.rows })
+        TodoDb.list((error, todoList) => {
+            if (error) {
+                callback(error);
+            } else {
+                // Wrap the list in an object to match TodoList message structure
+                callback(null, { todos: todoList });
+            }
         })
+        // static code works without database
+        // callback(null, todos);
     },
 
-    insert: function (call, callback) {
-        db.query('INSERT INTO Todos (title, description, date) VALUES ($1, $2, $3)', [call.request.title, call.request.description, new Date()], (err) => {
-            if (err) throw err;
-            callback(null, { status: "success" })
-        })
-    },
+
 
     get: function (call, callback) {
-        db.query('SELECT * FROM Todos WHERE id = $1', [call.request.id], (err, res) => {
-            if (err) throw err;
-            callback(null, res.rows[0])
-        })
+        var payload = {
+            condition: {
+                id: call.request.id
+            },
+        };
+        var t = new TodoDb(payload);
+        t.get(callback);
+
+        // static code works without database
+        // for (var i = 0; i < todos.length; i++)
+        //     if (todos[i].id == call.request.id)
+        //         return callback(null, todos[i]);
+        // callback({
+        //     code: grpc.status.NOT_FOUND,
+        //     details: 'Not found'
+        // });
+    },
+
+
+    insert: function (call, callback) {
+        var t = new TodoDb({
+            id: call.request.id,
+            title: call.request.title,
+            description: call.request.description,
+        });
+        t.insert(callback);
+
+        // static code works without database
+        // var todo = call.request;
+        // todos.push(todo);
+        // callback(null, {});
     },
 
     update: function (call, callback) {
-        db.query('UPDATE Todos SET title = $1, description =$2  WHERE id = $3', [call.request.title, call.request.description, call.request.id], (err) => {
-            if (err) throw err;
-            callback(null, { status: "success" })
-        })
+        var payload = {
+            condition: {
+                id: call.request.id,
+            },
+            update: {
+                id: call.request.id,
+                title: call.request.title,
+                description: call.request.description,
+            }
+        };
+        var t = new TodoDb(payload);
+        t.update(callback);
+
+        // static code works without database
+        // var todo = call.request;
+        // todos.push(todo);
+        // callback(null, {});
     },
 
     delete: function (call, callback) {
-        db.query('DELETE FROM Todos WHERE id = $1', [call.request.id], (err) => {
-            if (err) throw err;
-            callback(null, { status: "success" })
-        })
-    }
+        var payload = {
+            condition: {
+                id: call.request.id
+            }
+        };
+        var t = new TodoDb(payload);
+        t.delete(callback);
 
+        // static code works without database
+        // for (var i = 0; i < todos.length; i++) {
+        //     if (todos[i].id == call.request.id) {
+        //         todos.splice(i, 1);
+        //         return callback(null, {});
+        //     }
+        // }
+        // callback({
+        //     code: grpc.status.NOT_FOUND,
+        //     details: 'Not found'
+        // });
+    },
 });
 
 // gRPC Server

@@ -1,48 +1,55 @@
 
-const { Client } = require('pg')
-const connectionString = 'postgresql://root:root@localhost:5432/todo'
-const db = new Client({
-    connectionString: connectionString,
-})
-db.connect((err) => {
-    if (err) {
-        console.error('connection error', err.stack)
-    } else {
-        console.log('Postgres Connected')
-    }
-})
+global.Mongoose = require('mongoose');
+var mongoDB = 'mongodb://localhost/grpctodo';
+Mongoose.Promise = global.Promise;
+Mongoose.connect(mongoDB, { useNewUrlParser: true })
+    .then(() => console.log('Mongodb connection succesful'))
+    .catch((err) => console.error(err));
+Mongoose.set('useCreateIndex', true);
+const TodoDb = require('../tododb');
 
 
-// insert into db
-try{
-db.query('INSERT INTO Todos (title, description, date) VALUES ($1, $2, $3)', ["Kam karna hai", "Kam kar k Paisa Kamana hai", new Date()], (err) => {
-  if (err) throw err;
-  console.log("Insert Query Passed")
-})
-}catch (err){if(!err){  console.log("Get One Query Passed")
-}}
+var assert = {
+    get: function (call,callback) {
+        var payload = {
+            condition: {
+                id: call
+            }
+        };
+        var t = new TodoDb(payload);
+        t.get(callback);
+    },
+
+    delete: function (call,callback) {
+        var payload = {
+            condition: {
+                id: call
+            }
+        };
+        var t = new TodoDb(payload);
+        t.delete(callback);
+    },
+
+};
 
 
-// select all todos
-try{
-  db.query(`SELECT * FROM Todos`, (err, res) => {
-    if (err) throw err;
-    console.log("Get All Query Passed")
-})
-}catch (err){if(!err){  console.log("Get One Query Passed")
-}}
-
-// get one record
-try{
-const query = {
-  name: 'fetch-todo',
-  text: 'SELECT * FROM Todos WHERE id = $1',
-  values: [2]
+// try to get one todo
+try {
+    assert.get(parseInt(40),(error, todo)=>{
+        console.log(todo);
+    });
+    console.log('Passed.');
+} catch (error) {
+    console.log(error.message);
 }
-db.query(query, (err, res) => {
-  if (err) throw err;
-})
-}catch (err){if(!err){  console.log("Get One Query Passed")
-}}
 
 
+// try to delete todo
+try {
+    assert.delete(40,(error, todo)=>{
+        console.log(todo);
+    });
+    console.log('Passed.');
+} catch (error) {
+    console.log(error.message);
+}
