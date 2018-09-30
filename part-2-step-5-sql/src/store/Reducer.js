@@ -11,21 +11,19 @@ const ultimateTodoReducer = (state = defaultState, action) => {
         // add task
         case Actions.addTodoSuccess:
             updatedState.allTodos = [action.payload, ...updatedState.allTodos]
-            updatedState.addedTodo = true;
+            // updatedState.addedTodo = true;
             break;
         case Actions.addTodoError:
             swal(`Error: ${action.err} !`);
             break;
         case Actions.readAllTodoSuccess:
             updatedState.allTodos = action.payload;
-
             break;
         case Actions.readAllTodoError:
             swal(`Error: ${action.err} !`);
             break;
         case Actions.deleteTodoSuccess:
-            updatedState.allTodos = updatedState.allTodos.filter(todo => todo._id !== action.payload)
-            console.log(updatedState.allTodos)
+            updatedState.allTodos = updatedState.allTodos.filter(todo => todo.id !== action.payload)
             break;
         case Actions.deleteTodoError:
             swal(`Error: ${action.err} !`);
@@ -35,14 +33,14 @@ const ultimateTodoReducer = (state = defaultState, action) => {
                 if (todo.id === action.payload.id) {
                     todo.title = action.payload.title,
                         todo.description = action.payload.description,
-                        todo.doneStatus = action.payload.doneStatus
+                        todo.doneStatus = action.payload.done
                 };
+                swal('Status updated','Your status has been updated', 'success');
                 return todo
+                
             })
-
             break;
         case Actions.updateTodoError:
-            console.log(action.err)
             swal(`Error: ${action.err} !`);
             break;
         case Actions.taskDoneError:

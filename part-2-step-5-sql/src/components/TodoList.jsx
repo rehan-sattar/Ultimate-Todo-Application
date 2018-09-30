@@ -41,8 +41,9 @@ class TodoList extends Component {
     }
 
     componentWillReceiveProps(props) {
+        console.log(props)
         this.setState({
-            todos: props.todos         
+            todos: props.todos
         });
     };
 
@@ -74,47 +75,48 @@ class TodoList extends Component {
                     <div className="row justify-content-center">
                         <div className="col-md-10 col-lg-10 col-sm-12">
                             {this.state.todos ? this.state.todos.map((todo, index) => {
-                                if (!todo.Done) {
+                                if (!todo.doneStatus) {
                                     return (
                                         <div className="card my-5" key={index}>
                                             <div className="card-body">
                                                 <h3 className="todotext">
-                                                    {todo.Title}
+                                                    {todo.title}
                                                 </h3>
                                                 <p className="todotext">
-                                                    {todo.Description}
+                                                    {todo.description}
                                                 </p>
                                                 <div className="btn-group float-right">
                                                     <button
-                                                        onClick={() => this.handleTaskdone(todo._id, false)}
+                                                        onClick={() => this.handleTaskdone(todo.id, true)}
                                                         className="btn btn-outline-success btn-lg card_btns"> <i className="fa fa-check"></i> </button>
                                                     <button
-                                                        onClick={() => this.onOpenModal(todo._id)}
+                                                        onClick={() => this.onOpenModal(todo.id)}
                                                         className="btn btn-outline-warning btn-lg card_btns"> <i className="fas fa-pencil-alt"></i> </button>
                                                     <button
-                                                        onClick={() => this.handleDeleteRequest(todo._id)}
+                                                        onClick={() => this.handleDeleteRequest(todo.id)}
                                                         className="btn btn-outline-danger btn-lg card_btns"> <i className="fa fa-trash"></i> </button>
                                                 </div>
                                             </div>
                                         </div>
                                     )
                                 } else {
+
                                     return (
                                         <div className="card my-5 doneBody" key={index}>
                                             <div className="card-body">
                                                 <h3 className="todotext crossed">
-                                                    {todo.Title}
+                                                    {todo.title}
                                                 </h3>
                                                 <p className="todotext crossed">
-                                                    {todo.Description}
+                                                    {todo.description}
                                                 </p>
                                                 <div className="btn-group float-right">
                                                     <button
-                                                        onClick={() => this.handleTaskdone(todo._id, false)}
+                                                        onClick={() => this.handleTaskdone(todo.id, false)}
                                                         className="btn btn-outline-warning btn-lg card_btns"> <i className="fas fa-undo"></i> </button>
 
                                                     <button
-                                                        onClick={() => this.handleDeleteRequest(todo._id)}
+                                                        onClick={() => this.handleDeleteRequest(todo.id)}
                                                         className="btn btn-outline-danger btn-lg card_btns"> <i className="fa fa-trash"></i> </button>
                                                 </div>
                                             </div>
@@ -163,7 +165,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
     downloadTodos: (Todostate) => getAllTodosFromDatabase(Todostate),
     deleteATask: (todoId) => deleterTodoFromDatabase(todoId),
     updateTodoTask: (newTodoObject) => updateTodoInDatabase(newTodoObject),
-    changeDoneStatus: (todo) => taskDoneAttempt(todo)
+    changeDoneStatus: (todo, status) => taskDoneAttempt(todo,status )
 },
     dispatch);
 export default connect(mapStateToProps, mapDispatchToProps)(TodoList);
