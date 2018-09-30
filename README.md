@@ -13,10 +13,10 @@
 #### This Repository has 8 Different parts
 
 | Part  | Name    | Step-1 | Step-2 | Step-3 | Step-4 | Step-5 |
-|-------|--------| --------| --------| --------| --------| --------|
-|   1:  |Server  REST  API’s |
-|   2:  |Client  Apps |
-|   3:  | Realtime  App |
+|-------|--------| :--------:| :--------:| :--------:| :--------:| :--------:|
+|   1:  |Server  REST  API’s | Done |  Done | Done | - | - |
+|   2:  |Client  Apps | Done |  Done | Done | Done | Done |
+|   3:  | Realtime  App |  Done |  - | - | - | - |
 |   4:  | Containerizing  the  App  |
 |   5:  | Serverless  REST  API |
 |   6:  | Cloud  Native  App  |
