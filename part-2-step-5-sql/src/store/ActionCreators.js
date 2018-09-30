@@ -85,13 +85,12 @@ function updateTodoInDatabase({ updateDescription,
         })
     });
     updateTodoObservabe$.subscribe(data => {
-      console.log(data);
       dispatch({
-        type: Actions.addTodoSuccess,
+        type: Actions.updateTodoSuccess,
         payload: data[0]
       })
     }, err => dispatch({
-      type: Actions.addTodoError,
+      type: Actions.updateTodoError,
       err
     }));
   }
