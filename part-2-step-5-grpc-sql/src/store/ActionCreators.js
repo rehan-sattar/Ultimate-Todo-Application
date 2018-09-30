@@ -138,18 +138,44 @@ function getAllTodosFromDatabase() {
     }
 }
 
-function taskDoneAttempt(todo) {
+function taskDoneAttempt(todo, status) {
     return dispatch => {
-        fetch(``)
-            .then()
-            .then()
-            .catch()
+        const taskDoneObservable$ = Observable.create(observer$ => {
+            fetch(`${API_END_POINT}/todo/api/v1.0/todos/done/${todo}`, {
+                method: "put",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    done: status
+                })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data[0]) {
+                        observer$.next(data[0]);
+                        observer$.complete();
+                    }
+                })
+                .catch(err => {
+                    observer$.error(err);
+                });
+        });
+
+        taskDoneObservable$.subscribe(data => {
+            swal('status updated', 'Your status has been updated', 'success');
+            dispatch({
+                type: Actions.updateTodoSuccess,
+                payload: data[0]
+            });
+        }, err => dispatch({
+            type: Actions.taskDoneError,
+            err
+        })
+        )
     };
 };
 
-function getSpecificTodo() {
-
-};
 
 
 export {
@@ -157,160 +183,5 @@ export {
     deleterTodoFromDatabase,
     updateTodoInDatabase,
     getAllTodosFromDatabase,
-    getSpecificTodo,
     taskDoneAttempt
 };
-
-
-
-
-
-
-
-
-// ************* observable for read all ************** 
-
-
-// ***************** Add a Todo Observable ****************** 
-
-function addTodos({ title, description }) {
-    return dispatch => {
-        const addTodoObserve$ = Observable.create(observer$ => {
-            fetch(`https://nodejs-todo-server.herokuapp.com/todo/api/v1.0/tasks/ `, {
-                method: "POST",
-                body: JSON.stringify({
-                    Title: title,
-                    Description: description
-                }),
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.status === true) {
-                        swal('Task Added!', 'Your todo has beed added', 'success');
-                        fetch(`https://nodejs-todo-server.herokuapp.com/todo/api/v1.0/tasks/`, {
-                            method: 'GET'
-                        })
-                            .then(res => res.json())
-                            .then(data => {
-                                observer$.next(data);
-                                observer$.complete();
-                            });
-                    }
-                })
-                .catch(error => {
-                    console.log(error)
-                });
-        });
-
-        addTodoObserve$.subscribe(data => dispatch({
-            type: 'ALL_TODOS',
-            payload: data
-        }));
-    }
-}
-
-
-// +============== Remove Todo rxjs Observable Action ===============+
-
-function removeTodo(id) {
-    return dispatch => {
-        const deletTodoFromDatabase$ = Observable.create(observer$ => {
-            fetch(`https://nodejs-todo-server.herokuapp.com/todo/api/v1.0/tasks/${id}`, {
-                method: "delete"
-            })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.status === true) {
-                        swal('Task deleted!', 'Your todo has beed deleted', 'success');
-                        fetch(`https://nodejs-todo-server.herokuapp.com/todo/api/v1.0/tasks/`, {
-                            method: 'GET'
-                        })
-                            .then(res => res.json())
-                            .then(data => {
-                                observer$.next(data);
-                                observer$.complete();
-                            });
-                    }
-                })
-                .catch(err => console.log(err));
-        })
-        deletTodoFromDatabase$.subscribe(repsonse => dispatch({
-            type: 'ALL_TODOS',
-            payload: repsonse
-        }));
-    };
-};
-
-
-// +================== Update Fucntion Observable ===============+ 
-
-function updateFunction({ id, Title, Description }) {
-    return dispatch => {
-        const todoObject = {
-            Title,
-            Description
-        };
-
-        const updateTodoObservabe$ = Observable.create(observer$ => {
-            fetch(`https://nodejs-todo-server.herokuapp.com/todo/api/v1.0/tasks/${id}`, {
-                method: "PUT",
-                body: JSON.stringify(todoObject),
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            })
-                .then(res => res.json())
-                .then(data => {
-                    swal('Task updated!', 'Your todo has beed updated', 'success');
-                    fetch(`https://nodejs-todo-server.herokuapp.com/todo/api/v1.0/tasks/`, {
-                        method: 'GET'
-                    })
-                        .then(res => res.json())
-                        .then(data => {
-                            observer$.next(data);
-                            observer$.complete();
-                        });
-                })
-        })
-
-        updateTodoObservabe$.subscribe(response => dispatch({
-            type: 'ALL_TODOS',
-            payload: response
-        }));
-    }
-};
-
-function markAsDone(id, status) {
-    return dispatch => {
-
-        const markAsDoneObservable$ = Observable.create(observer$ => {
-            fetch(`https://nodejs-todo-server.herokuapp.com/todo/api/v1.0/tasks/${id}/${status}`, {
-                method: "PUT"
-            })
-                .then(res => res.json())
-                .then(data => {
-                    console.log(data);
-                    swal('Task status Updated!', 'Your todo has beed updated', 'success');
-
-                    fetch(`https://nodejs-todo-server.herokuapp.com/todo/api/v1.0/tasks/`, {
-                        method: 'GET'
-                    })
-                        .then(res => res.json())
-                        .then(data => {
-                            observer$.next(data);
-                            observer$.complete()
-                        });
-                });
-        });
-
-        markAsDoneObservable$.subscribe(res => dispatch({
-            type: 'ALL_TODOS',
-            payload: res
-        }));
-    };
-};
-
-
