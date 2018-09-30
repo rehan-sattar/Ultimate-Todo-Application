@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import Form from "./Form";
-import List from "./TodoList";
-
+import TodoList from "./TodoList";
+import "../App.css";
 class AppContainer extends Component {
     render() {
-        return(
-            <div> 
+        return (
+            <div>
                 <Form />
-                <List />
+                <TodoList />
             </div>
         );
     };

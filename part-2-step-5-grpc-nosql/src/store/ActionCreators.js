@@ -1,6 +1,7 @@
-import { Observable } from 'rxjs';
+import { Observable, observable } from 'rxjs';
 import swal from "sweetalert";
 import { Actions } from "./Actions";
+import { Action } from 'rxjs/internal/scheduler/Action';
 const API_END_POINT = 'http://localhost:2000';
 function insertTodoToDatabase(todoState) {
     return dispatch => {
@@ -122,7 +123,7 @@ function updateTodoInDatabase({ updateDescription,
 function getAllTodosFromDatabase() {
     return dispatch => {
         const getDataFromDatabase$ = Observable.create(observer$ => {
-            fetch('https://nodejs-todo-server.herokuapp.com/todo/api/v1.0/tasks/')
+            fetch(`${API_END_POINT}/todo/api/v1.0/tasks`)
                 .then(response => response.json())
                 .then(data => {
                     observer$.next(data);
@@ -132,23 +133,47 @@ function getAllTodosFromDatabase() {
         });
 
         getDataFromDatabase$.subscribe(data => dispatch({
-            type: 'ALL_TODOS',
+            type: Actions.readAllTodoSuccess,
             payload: data
         }));
     }
 }
 
-function taskDoneAttempt(todo) {
+function taskDoneAttempt(todo, status) {
     return dispatch => {
-        fetch(``)
-            .then()
-            .then()
-            .catch()
+        const taskDone$ = Observable.create(observer$ => {
+            fetch(`${API_END_POINT}/todo/api/v1.0//tasks/status/edit/${todo}`, {
+                method: 'PUT',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    done: status
+                })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    fetch(`${API_END_POINT}/todo/api/v1.0/tasks`)
+                        .then(res => res.json())
+                        .then(data => {
+                            observer$.next(data);
+                            observer$.complete();
+                        })
+                })
+                .catch(err => observer$.error(err));
+        })
+
+        taskDone$.subscribe(data => dispatch({
+            type: Actions.readAllTodoSuccess,
+            payload: data
+        }), err => dispatch({
+            type: Actions.readAllTodoError,
+            err
+        }))
+
+
+
     };
-};
-
-function getSpecificTodo() {
-
 };
 
 
@@ -157,8 +182,5 @@ export {
     deleterTodoFromDatabase,
     updateTodoInDatabase,
     getAllTodosFromDatabase,
-    getSpecificTodo,
     taskDoneAttempt
 };
-
-
