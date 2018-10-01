@@ -1,32 +1,57 @@
+import swal from "sweetalert";
+import { Actions } from './Actions';
 const defaultState = {
-    todos: null,
-    newTodo: null,
-    deletedTodoFlag: false,
-    updatedTodo: null
-};
-export function todoReducer(state = defaultState, action) {
-    let newState = { ...state };
-    switch (action.type) {
-        case 'ALL_TODOS':
-
-            newState.todos = action.payload
-            break;
-        case 'TODO_ADDED':
-            console.log('Triggered')
-            newState.newTodo = action.payload;
-            break;
-        case 'TODO_DELETED':
-            console.log('Triggered')
-            newState.deletedTodoFlag = true;
-            break;
-        case 'DATA_UPDATED':
-            console.log('Triggered')            
-            newState.updatedTodo = action.payload;
-            break;
-        default:
-            return newState;
-    };
-    return newState
+    allTodos: [],
+    error: '',
+    addedTodo: false
 }
+const ultimateTodoReducer = (state = defaultState, action) => {
+    let updatedState = { ...state };
+    switch (action.type) {
+        // add task
+        case Actions.addTodoSuccess:
+            updatedState.allTodos = [action.payload, ...updatedState.allTodos]
+            updatedState.addedTodo = true;
+            break;
+        case Actions.addTodoError:
+            swal(`Error: ${action.err} !`);
+            break;
+        case Actions.readAllTodoSuccess:
+            updatedState.allTodos = action.payload;
 
-export default todoReducer;
+            break;
+        case Actions.readAllTodoError:
+            swal(`Error: ${action.err} !`);
+            break;
+        case Actions.deleteTodoSuccess:
+            updatedState.allTodos = updatedState.allTodos.filter(todo => todo.id !== action.payload)
+            break;
+        case Actions.deleteTodoError:
+            swal(`Error: ${action.err} !`);
+            break;
+        case Actions.updateTodoSuccess:
+            updatedState.allTodos = updatedState.allTodos.filter(todo => {
+                if (todo.id === action.payload.id) {
+                    todo.title = action.payload.title,
+                        todo.description = action.payload.description,
+                        todo.doneStatus = action.payload.doneStatus
+                };
+                return todo
+            })
+
+            break;
+        case Actions.updateTodoError:
+            console.log(action.err)
+            swal(`Error: ${action.err} !`);
+            break;
+        case Actions.taskDoneError:
+            swal(`Error: ${action.err} !`);
+            break
+        default:
+            return updatedState;
+    }
+
+    return updatedState;
+};
+
+export default ultimateTodoReducer;
